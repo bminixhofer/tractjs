@@ -3,7 +3,21 @@ import * as tractjs from "tractjs";
 const canvas = document.querySelector("#canvas");;
 const uploader = document.querySelector("#imageUpload");
 
-const modelPromise = new tractjs.Model("squeezenet1.0-8.onnx");
+const modelPromise = new tractjs.Model("squeezenet1_1.onnx");
+const labelPromise = fetch("synset.txt").then((response) => response.text()).then((text) => {
+    const labels = [];
+
+    text.split("\n").forEach((line) => {
+        if (line.trim().length == 0) {
+            return;
+        }
+
+        let label = line.split(" ").slice(1).join(" ").split(",")[0];
+        labels.push(label);
+    });
+
+    return labels;
+});
 
 function drawImage(img, canvas) {
     const ctx = canvas.getContext("2d");
@@ -36,13 +50,26 @@ function getData(canvas) {
     return [output, [1, 3, canvas.height, canvas.width]];
 }
 
+function softmax(logits) {
+    const exp = logits.map((x) => Math.exp(x));
+    const sum = exp.reduce((a, b) => a + b, 0);
+
+    return exp.map((x) => x / sum);
+}
+
+function getTopK(preds, k = 5) {
+    let indices = Array.from(preds).map((x, i) => [x, i]).sort((a, b) => b[0] > a[0]);
+    return indices.slice(0, k);
+}
+
 async function predict(input, shape) {
     const model = await modelPromise;
 
     let inputTensor = new tractjs.Tensor(input, shape);
     let outputTensor = model.predict(inputTensor);
 
-    console.log(outputTensor.shape());
+    let preds = softmax(outputTensor.data());
+    return preds;
 }
 
 uploader.addEventListener("change", function () {
@@ -50,11 +77,19 @@ uploader.addEventListener("change", function () {
         const img = new Image();
         img.src = URL.createObjectURL(this.files[0]);
 
-        img.onload = function () {
+        img.onload = async function () {
             drawImage(img, canvas);
             const [input, shape] = getData(canvas);
 
-            predict(input, shape);
+            console.time("inference");
+            const preds = await predict(input, shape);
+            console.timeEnd("inference");
+            const top_k = getTopK(preds);
+            const labels = await labelPromise;
+
+            top_k.forEach(([score, index]) => {
+                console.log(score, labels[index]);
+            });
         }
     };
 });
