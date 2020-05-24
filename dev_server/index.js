@@ -1,3 +1,3 @@
-import * as tractwasm from "tractwasm";
+import * as tractjs from "tractjs";
 
-tractwasm.load("squeezenet1.0-8.onnx");
+tractjs.load("squeezenet1.0-8.onnx");

@@ -5,7 +5,7 @@
         "create-wasm-app": ".bin/create-wasm-app.js"
     },
     "dependencies": {
-        "tractwasm": "file:../pkg"
+        "tractjs": "file:../pkg"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^5.0.0",
