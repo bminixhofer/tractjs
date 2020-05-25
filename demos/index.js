@@ -62,7 +62,9 @@ function softmax(logits) {
 }
 
 function getTopK(preds, k = 5) {
-    let indices = Array.from(preds).map((x, i) => [x, i]).sort((a, b) => b[0] > a[0]);
+    let indices = Array.from(preds).map((x, i) => [x, i]);
+    indices.sort((a, b) => b[0] - a[0]);
+
     return indices.slice(0, k);
 }
 
@@ -108,7 +110,7 @@ predictButton.addEventListener("click", async () => {
     const top_k = getTopK(preds);
     const labels = await labelPromise;
 
-    timeLabel.textContent = `${endTime - startTime} ms`;
+    timeLabel.textContent = `${Math.round(endTime - startTime)} ms`;
     predList.innerHTML = "";
 
     top_k.forEach(([score, index]) => {
