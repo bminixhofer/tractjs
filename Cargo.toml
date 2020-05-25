@@ -23,5 +23,6 @@ features = [
 ]
 
 [profile.release]
-opt-level = 'z'
+opt-level = 's'
+codegen-units = 1
 lto = true
