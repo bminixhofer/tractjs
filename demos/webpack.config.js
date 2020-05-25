@@ -12,6 +12,6 @@ module.exports = {
         new CopyWebpackPlugin(['index.html'])
     ],
     devServer: {
-        contentBase: "static"
+        contentBase: "dist"
     }
 };

@@ -3,8 +3,8 @@ import * as tractjs from "tractjs";
 const canvas = document.querySelector("#canvas");;
 const uploader = document.querySelector("#imageUpload");
 
-const modelPromise = new tractjs.Model("squeezenet1_1.onnx");
-const labelPromise = fetch("synset.txt").then((response) => response.text()).then((text) => {
+const modelPromise = new tractjs.Model("resources/squeezenet1_1.onnx");
+const labelPromise = fetch("resources/synset.txt").then((response) => response.text()).then((text) => {
     const labels = [];
 
     text.split("\n").forEach((line) => {
