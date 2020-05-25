@@ -2,6 +2,10 @@ import * as tractjs from "tractjs";
 
 const canvas = document.querySelector("#canvas");;
 const uploader = document.querySelector("#imageUpload");
+const predictButton = document.querySelector("#predict");
+const sampleImagesSelector = document.querySelector("#sampleImages");
+const timeLabel = document.querySelector("#time");
+const predList = document.querySelector("#predictions");
 
 const modelPromise = new tractjs.Model("resources/squeezenet1_1.onnx");
 const labelPromise = fetch("resources/synset.txt").then((response) => response.text()).then((text) => {
@@ -77,19 +81,39 @@ uploader.addEventListener("change", function () {
         const img = new Image();
         img.src = URL.createObjectURL(this.files[0]);
 
-        img.onload = async function () {
+        img.onload = function () {
             drawImage(img, canvas);
-            const [input, shape] = getData(canvas);
-
-            console.time("inference");
-            const preds = await predict(input, shape);
-            console.timeEnd("inference");
-            const top_k = getTopK(preds);
-            const labels = await labelPromise;
-
-            top_k.forEach(([score, index]) => {
-                console.log(score, labels[index]);
-            });
         }
     };
+});
+
+sampleImagesSelector.addEventListener("change", function () {
+    let source = `resources/${this.value}.png`;
+
+    const img = new Image();
+    img.src = source;
+
+    img.onload = function () {
+        drawImage(img, canvas);
+    }
+});
+
+predictButton.addEventListener("click", async () => {
+    const [input, shape] = getData(canvas);
+
+    let startTime = performance.now();
+    const preds = await predict(input, shape);
+    let endTime = performance.now();
+
+    const top_k = getTopK(preds);
+    const labels = await labelPromise;
+
+    timeLabel.textContent = `${endTime - startTime} ms`;
+    predList.innerHTML = "";
+
+    top_k.forEach(([score, index]) => {
+        const child = document.createElement("li");
+        child.textContent = `${labels[index]}: ${Math.round(score * 100)}%`
+        predList.appendChild(child);
+    });
 });

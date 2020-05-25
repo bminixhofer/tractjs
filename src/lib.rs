@@ -5,15 +5,6 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::Response;
 
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-    #[wasm_bindgen(js_namespace = console)]
-    fn time(s: &str);
-    #[wasm_bindgen(js_namespace = console)]
-    fn timeEnd(s: &str);
-}
-
 async fn fetch(url: &str) -> Result<impl Read, JsValue> {
     let window = web_sys::window().expect("couldn't get window object");
     let response: Response = JsFuture::from(window.fetch_with_str(url)).await?.into();
