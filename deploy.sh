@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-set -e
-
-git checkout gh-pages
+git checkout gh-pages && git checkout --orphan gh-pages
 # remove last build
 rm -rf *
 # check out current directory on master branch
