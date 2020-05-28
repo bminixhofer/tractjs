@@ -1,5 +1,6 @@
 module.exports = {
-  "transpileDependencies": [
+  transpileDependencies: [
     "vuetify"
-  ]
+  ],
+  chainWebpack: config => config.resolve.symlinks(false)
 }
