@@ -15,6 +15,9 @@ npm run build
 # add subpages
 cp -a dist/index.html dist/squeezenet.html
 
+git config --local user.email "action@github.com"
+git config --local user.name "GitHub Action"
+
 git --work-tree dist add -f --all
 git commit -m "deploy"
 git push -f origin gh-pages
