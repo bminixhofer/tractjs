@@ -4,13 +4,14 @@ set -e
 
 git checkout gh-pages
 # remove last build
-rm -r *
+rm -rf *
 # check out current directory on master branch
 git checkout master -- .
 
 # build
 wasm-pack build --release
 cd demos
+npm ci
 npm run build
 
 # add subpages

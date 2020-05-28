@@ -58,7 +58,7 @@ import * as tractjs from "tractjs";
 
 function rURL(src) {
   // this makes sure it works both locally and on gh-pages
-  return new URL(src, window.location.href);
+  return window.location.href.replace(/\/$/, "") + "/" + src;
 }
 
 function drawImage(src, canvas) {
@@ -132,19 +132,19 @@ export default {
     items: [
       {
         text: "Cat",
-        value: rURL("./cat.png")
+        value: rURL("cat.png")
       },
       {
         text: "Dog",
-        value: rURL("./dog.png")
+        value: rURL("dog.png")
       },
       {
         text: "Cheetah",
-        value: rURL("./cheetah.png")
+        value: rURL("cheetah.png")
       },
       {
         text: "Bird",
-        value: rURL("./bird.png")
+        value: rURL("bird.png")
       }
     ],
     output: null,
@@ -157,9 +157,9 @@ export default {
     }
   },
   async created() {
-    this.model = await new tractjs.Model(rURL("./squeezenet1_1.onnx").href);
+    this.model = await new tractjs.Model(rURL("squeezenet1_1.onnx"));
 
-    const response = await fetch(rURL("./synset.txt"));
+    const response = await fetch(rURL("synset.txt"));
     if (response.status < 200 && response.status >= 300) {
       return;
     }
@@ -220,7 +220,7 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  max-width: 20rem;
+  max-width: 30rem;
 
   .col {
     padding: 0.1em;
