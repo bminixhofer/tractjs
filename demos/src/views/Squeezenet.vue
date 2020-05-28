@@ -127,19 +127,19 @@ export default {
     items: [
       {
         text: "Cat",
-        value: "./cat.png"
+        value: "./squeezenet/cat.png"
       },
       {
         text: "Dog",
-        value: "./dog.png"
+        value: "./squeezenet/dog.png"
       },
       {
         text: "Cheetah",
-        value: "./cheetah.png"
+        value: "./squeezenet/cheetah.png"
       },
       {
         text: "Bird",
-        value: "./bird.png"
+        value: "./squeezenet/bird.png"
       }
     ],
     output: null,
@@ -152,9 +152,9 @@ export default {
     }
   },
   async created() {
-    this.model = await new tractjs.Model("./squeezenet1_1.onnx");
+    this.model = await new tractjs.Model("./squeezenet/squeezenet1_1.onnx");
 
-    const response = await fetch("./synset.txt");
+    const response = await fetch("./squeezenet/synset.txt");
     if (response.status < 200 && response.status >= 300) {
       return;
     }
