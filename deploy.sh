@@ -20,5 +20,5 @@ git config --local user.name "GitHub Action"
 
 git --work-tree dist add -f --all
 git commit -m "deploy"
-git push -f origin gh-pages
+git push -f origin HEAD:gh-pages
 git checkout -f master
