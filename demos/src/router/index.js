@@ -14,10 +14,12 @@ const routes = [
   {
     path: '/squeezenet',
     name: 'Squeezenet',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Squeezenet.vue')
+    component: () => import(/* webpackChunkName: "squeezenet" */ '../views/Squeezenet.vue')
+  },
+  {
+    path: '/custom-model',
+    name: 'CustomModel',
+    component: () => import(/* webpackChunkName: "custom_model" */ '../views/CustomModel.vue')
   },
   {
     path: "*",

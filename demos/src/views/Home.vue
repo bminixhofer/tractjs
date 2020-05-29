@@ -41,7 +41,7 @@ export default {
       {
         title: "Custom model inference",
         text: "Upload a .onnx file and run data through it.",
-        href: "custom_model"
+        href: "custom-model"
       }
     ],
     resources: [

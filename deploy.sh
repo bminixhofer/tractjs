@@ -14,6 +14,7 @@ npm run build
 
 # add subpages
 cp -a dist/index.html dist/squeezenet.html
+cp -a dist/index.html dist/custom-model.html
 
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"
