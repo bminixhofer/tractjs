@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <h1 class="headline">Custom model Inference</h1>
     <v-form v-model="valid">
-      <v-container>
+      <v-container class="input">
         <v-row>
           <v-col class="input-name">
             <h2>Model</h2>
@@ -70,6 +70,16 @@
       class="align-self-center"
       x-large
     >Predict</v-btn>
+    <v-container class="output" v-if="output">
+      <v-row>
+        <v-col class="body-1 font-weight-bold ma-0">Inference time:</v-col>
+        <v-col class="text-right">{{Math.round(output.time)}}ms</v-col>
+      </v-row>
+      <v-row>
+        <v-col class="body-1 font-weight-bold ma-0">Output shape:</v-col>
+        <v-col class="text-right">{{'(' + output.shape.join(', ') + ')'}}</v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -96,7 +106,8 @@ export default {
     dataType: "float32",
     initializer: "all zeros",
     rank: 3,
-    shape: []
+    shape: [],
+    output: null
   }),
   watch: {
     rank: {
@@ -131,8 +142,14 @@ export default {
       const data = new this.dataTypes[this.dataType].data(nInputs);
 
       const tensorInput = new tractjs.Tensor(data, shape);
+      let startTime = performance.now();
       const tensorOutput = this.model.predict(tensorInput);
-      console.log(tensorOutput.shape());
+      let endTime = performance.now();
+
+      this.output = {
+        time: endTime - startTime,
+        shape: tensorOutput.shape()
+      };
     }
   },
   name: "CustomModelDemo"
@@ -140,14 +157,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.col.input-name {
-  font-weight: bold;
-  text-align: right;
-  font-size: 12px;
-  padding-top: 0.1rem;
-  margin-right: 2rem;
-}
-
 .small-input {
   margin: 0;
   padding: 0;
@@ -158,7 +167,25 @@ export default {
   padding: 0;
 }
 
-.row {
-  min-height: 3.4rem;
+.input {
+  .row {
+    min-height: 3.4rem;
+  }
+
+  .col.input-name {
+    font-weight: bold;
+    text-align: right;
+    font-size: 12px;
+    padding-top: 0.1rem;
+    margin-right: 2rem;
+  }
+}
+
+.output {
+  max-width: 30rem;
+
+  .col {
+    padding: 0.1em;
+  }
 }
 </style>
