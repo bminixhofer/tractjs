@@ -844,7 +844,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tract-js"
+name = "tract-js-core"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",

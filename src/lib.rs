@@ -1,7 +1,8 @@
-use js_sys::{Array, ArrayBuffer, Float32Array, Uint32Array, Uint8Array};
+use js_sys::{Array, ArrayBuffer, Error, Uint32Array, Uint8Array};
 use std::io::{Cursor, Read};
 use tract_onnx::prelude::*;
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::Response;
 
@@ -13,6 +14,19 @@ async fn fetch(url: &str) -> Result<impl Read, JsValue> {
     let data: Uint8Array = Uint8Array::new(&array_buffer.into());
 
     Ok(Cursor::new(data.to_vec()))
+}
+
+pub trait TractResultExt<T> {
+    fn map_js_error(self) -> Result<T, Error>;
+}
+
+impl<T: std::fmt::Debug> TractResultExt<T> for TractResult<T> {
+    fn map_js_error(self) -> Result<T, Error> {
+        match self {
+            Ok(x) => Ok(x),
+            Err(x) => Err(Error::new(&format!("{:#?}", x))),
+        }
+    }
 }
 
 mod js_tensor {
@@ -38,16 +52,49 @@ mod js_tensor {
         }
 
         #[wasm_bindgen(constructor)]
-        pub fn new(data: Float32Array, shape: Array) -> Tensor {
-            Tensor::from_shape_vec(data.to_vec(), shape)
+        pub fn new(data: JsValue, shape: Array) -> Result<Tensor, JsValue> {
+            if let Some(array) = data.dyn_ref::<js_sys::Float64Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Float32Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Uint16Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Uint8Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Uint8ClampedArray>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Int32Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Int16Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else if let Some(array) = data.dyn_ref::<js_sys::Int8Array>() {
+                Ok(Tensor::from_shape_vec(array.to_vec(), shape))
+            } else {
+                Err("asdf".into())
+            }
         }
 
-        pub fn data(&self) -> JsValue {
-            let view = self.inner.to_array_view().unwrap();
-            let slice = view.as_slice().unwrap();
+        pub fn data(&self) -> Result<JsValue, JsValue> {
+            macro_rules! make_array {
+                ( $tensor:expr, $array_type:ty ) => {{
+                    <$array_type>::from(
+                        $tensor
+                            .to_array_view()
+                            .map_js_error()?
+                            .as_slice()
+                            .expect("slice is not contiguous"),
+                    )
+                }};
+            }
 
             match self.inner.datum_type() {
-                DatumType::F32 => Float32Array::from(slice).into(),
+                DatumType::F64 => Ok(make_array!(self.inner, js_sys::Float64Array).into()),
+                DatumType::F32 => Ok(make_array!(self.inner, js_sys::Float32Array).into()),
+                DatumType::U16 => Ok(make_array!(self.inner, js_sys::Uint16Array).into()),
+                DatumType::U8 => Ok(make_array!(self.inner, js_sys::Uint8Array).into()),
+                DatumType::I32 => Ok(make_array!(self.inner, js_sys::Int32Array).into()),
+                DatumType::I16 => Ok(make_array!(self.inner, js_sys::Int16Array).into()),
+                DatumType::I8 => Ok(make_array!(self.inner, js_sys::Int8Array).into()),
                 _ => panic!("unsupported data type"),
             }
         }
@@ -81,17 +128,17 @@ impl Model {
 
         let mut reader = fetch(&url).await?;
 
-        let model = onnx().model_for_read(&mut reader).unwrap();
-        let mut model = model.into_optimized().unwrap();
+        let model = onnx().model_for_read(&mut reader).map_js_error()?;
+        let mut model = model.into_optimized().map_js_error()?;
 
-        model.auto_outputs().unwrap();
-        let plan = SimplePlan::new(model).unwrap();
+        model.auto_outputs().map_js_error()?;
+        let plan = SimplePlan::new(model).map_js_error()?;
 
         Ok(Model { plan })
     }
 
-    pub fn predict(&self, data: js_tensor::Tensor) -> js_tensor::Tensor {
-        let outputs = self.plan.run(tvec![data.inner()]).unwrap();
-        js_tensor::Tensor::from_tract_tensor((*outputs[0]).clone())
+    pub fn predict(&self, data: js_tensor::Tensor) -> Result<js_tensor::Tensor, JsValue> {
+        let outputs = self.plan.run(tvec![data.inner()]).map_js_error()?;
+        Ok(js_tensor::Tensor::from_tract_tensor((*outputs[0]).clone()))
     }
 }
