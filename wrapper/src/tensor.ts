@@ -1,4 +1,4 @@
-import type { TypedArray } from "tract-js-core";
+import type { TypedArray } from "tractjs-core";
 
 export class Tensor {
     data: TypedArray

@@ -844,17 +844,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tract-js-core"
-version = "0.1.0"
-dependencies = [
- "console_error_panic_hook",
- "js-sys",
- "tract-onnx",
- "wasm-bindgen",
- "web-sys",
-]
-
-[[package]]
 name = "tract-linalg"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -888,6 +877,17 @@ dependencies = [
  "prost-build",
  "smallvec",
  "tract-hir",
+]
+
+[[package]]
+name = "tractjs-core"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "js-sys",
+ "tract-onnx",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

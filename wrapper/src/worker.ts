@@ -1,12 +1,16 @@
-import type { CoreModel } from "tract-js-core";
 import { Tensor } from "./tensor";
+import { CoreModel, CoreTensorVec, CoreTensor } from "tractjs-core";
+import init from "tractjs-core";
+import wasm from "../../pkg/tractjs_core_bg.wasm";
 
-const corePromise = import("tract-js-core");
+const initialize = init(wasm());
+
+const ctx = (self as any) as Worker;
 
 class ModelStorage {
     store: { [id: number]: CoreModel } = {}
 
-    add(model: CoreModel): number {
+    add(model: any): number {
         let id = 0;
 
         while (this.store[id] !== undefined) {
@@ -28,23 +32,20 @@ class ModelStorage {
 
 const store = new ModelStorage();
 
-export async function loadModel(url: string): Promise<number> {
-    const core = await corePromise;
-    const response = await fetch(url);
-    const buffer = await response.arrayBuffer();
+async function load(data: Uint8Array): Promise<number> {
+    await initialize;
 
-    const model = await core.CoreModel.load(new Uint8Array(buffer));
-
+    const model = CoreModel.load(data);
     return store.add(model);;
 }
 
-export async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
-    const core = await corePromise;
+async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
+    await initialize;
     const model = store.get(modelId);
 
-    const inputs = new core.CoreTensorVec();
+    const inputs = new CoreTensorVec();
     tensors.forEach((tensor) => {
-        const coreTensor = new core.CoreTensor(tensor.data, new Uint32Array(tensor.shape));
+        const coreTensor = new CoreTensor(tensor.data, new Uint32Array(tensor.shape));
 
         inputs.push(coreTensor);
     });
@@ -62,6 +63,33 @@ export async function predict(modelId: number, tensors: Tensor[]): Promise<Tenso
     return outputTensors;
 }
 
-export function destroy(modelId: number) {
+async function destroy(modelId: number): Promise<void> {
     store.remove(modelId);
 }
+
+ctx.addEventListener("message", e => {
+    const data = e.data;
+    let promise;
+
+    switch (data.type) {
+        case "load":
+            promise = load(data.body.data);
+            break;
+        case "predict":
+            promise = predict(data.body.modelId, data.body.tensors);
+            break;
+        case "destroy":
+            promise = destroy(data.body);
+            break;
+        default:
+            throw new Error(`could not find type ${data.type}`);
+    }
+
+    (promise as any).then((body: any) => {
+        ctx.postMessage({
+            type: data.type,
+            body,
+            uid: data.uid,
+        });
+    });
+});
