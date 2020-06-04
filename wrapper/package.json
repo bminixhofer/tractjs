@@ -9,6 +9,7 @@
   "scripts": {
     "build": "npx rollup -c && npx dts-bundle-generator -o dist/tractjs.d.ts dist/index.d.ts",
     "build-docs": "npx typedoc --out $DOC_DIR dist/index.d.ts",
+    "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

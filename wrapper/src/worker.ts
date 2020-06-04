@@ -5,12 +5,12 @@ import wasm from "../../pkg/tractjs_core_bg.wasm";
 
 const initialize = init(wasm());
 
-const ctx = (self as any) as Worker;
+const ctx = (self as unknown) as Worker;
 
 class ModelStorage {
     store: { [id: number]: CoreModel } = {}
 
-    add(model: any): number {
+    add(model: CoreModel): number {
         let id = 0;
 
         while (this.store[id] !== undefined) {
@@ -36,7 +36,7 @@ async function load(data: Uint8Array): Promise<number> {
     await initialize;
 
     const model = CoreModel.load(data);
-    return store.add(model);;
+    return store.add(model);
 }
 
 async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
@@ -85,7 +85,7 @@ ctx.addEventListener("message", e => {
             throw new Error(`could not find type ${data.type}`);
     }
 
-    (promise as any).then((body: any) => {
+    (promise as Promise<unknown>).then((body) => {
         ctx.postMessage({
             type: data.type,
             body,
