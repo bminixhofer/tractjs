@@ -3,13 +3,27 @@ import workerLoader from 'rollup-plugin-web-worker-loader';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from "@rollup/plugin-replace";
 import wasm from "@rollup/plugin-wasm";
+import { terser } from "rollup-plugin-terser";
+import pkg from './package.json';
 
 export default {
     input: 'src/index.ts',
-    output: {
-        dir: 'dist',
-        format: 'esm'
-    },
+    output: [
+        {
+            file: pkg.main,
+            format: "cjs"
+        },
+        {
+            file: pkg.module,
+            format: "esm"
+        },
+        {
+            file: pkg.browser,
+            format: "iife",
+            name: "tractjs",
+            plugins: [terser()]
+        }
+    ],
     plugins: [
         wasm(),
         resolve(),
