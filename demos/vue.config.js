@@ -3,7 +3,7 @@ module.exports = {
     "vuetify"
   ],
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/tract-js/'
+    ? '/tractjs/'
     : '/',
   chainWebpack: config => config.resolve.symlinks(false)
 }

@@ -136,19 +136,19 @@ export default {
     }
   },
   methods: {
-    run() {
+    async run() {
       const shape = this.shape.map(dim => dim.value);
       const nInputs = shape.reduce((a, b) => a * b, 1);
       const data = new this.dataTypes[this.dataType].data(nInputs);
 
       const tensorInput = new tractjs.Tensor(data, shape);
       let startTime = performance.now();
-      const tensorOutput = this.model.predict(tensorInput);
+      const tensorOutput = (await this.model.predict([tensorInput]))[0];
       let endTime = performance.now();
 
       this.output = {
         time: endTime - startTime,
-        shape: tensorOutput.shape()
+        shape: tensorOutput.shape
       };
     }
   },

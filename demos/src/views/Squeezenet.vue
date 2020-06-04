@@ -191,11 +191,11 @@ export default {
         drawImage(url, this.$refs.canvas);
       }
     },
-    predict(input, shape) {
+    async predict(input, shape) {
       let inputTensor = new tractjs.Tensor(input, shape);
-      let outputTensor = this.model.predict(inputTensor);
+      let outputTensor = (await this.model.predict([inputTensor]))[0];
 
-      let preds = softmax(outputTensor.data());
+      let preds = softmax(outputTensor.data);
       return preds;
     },
     async run() {
