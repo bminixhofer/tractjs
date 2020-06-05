@@ -30,3 +30,5 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: build
+          GIT_CONFIG_NAME: Github Action
+          GIT_CONFIG_EMAIL: action@github.com
