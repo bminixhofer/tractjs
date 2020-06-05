@@ -4,11 +4,13 @@
   "description": "A library for running ONNX and TensorFlow inference in the browser.",
   "main": "dist/tractjs.js",
   "module": "dist/tractjs.esm.js",
-  "browser": "dist/tractjs.min.js",
+  "minified": "dist/tractjs.min.js",
   "types": "dist/tractjs.d.ts",
   "scripts": {
-    "build": "npx rollup -c && npx dts-bundle-generator -o dist/tractjs.d.ts dist/index.d.ts",
-    "build-docs": "npx typedoc --out $DOC_DIR dist/index.d.ts",
+    "build": "npm run build-pkg && npm ci && npm run build-wrapper && npm run build-docs",
+    "build-pkg": "wasm-pack build --release --target web --out-dir ./wrapper/core",
+    "build-wrapper": "npx rollup -c && npx dts-bundle-generator -o dist/tractjs.d.ts dist/index.d.ts",
+    "build-docs": "npx typedoc --out docs dist/index.d.ts",
     "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -43,7 +45,7 @@
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "rollup-plugin-web-worker-loader": "^1.3.0",
-    "tractjs-core": "file:../pkg",
+    "tractjs-core": "file:./core",
     "tslib": "^2.0.0",
     "typedoc": "^0.17.7",
     "typescript": "^3.9.3"

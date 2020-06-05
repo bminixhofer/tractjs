@@ -1,7 +1,7 @@
 import { Tensor } from "./tensor";
 import { CoreModel, CoreTensorVec, CoreTensor } from "tractjs-core";
 import init from "tractjs-core";
-import wasm from "../../pkg/tractjs_core_bg.wasm";
+import wasm from "../core/tractjs_core_bg.wasm";
 
 const initialize = init(wasm());
 

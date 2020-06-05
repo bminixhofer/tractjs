@@ -1,0 +1,18 @@
+[
+    {
+        "path": "/",
+        "name": "Home"
+    },
+    {
+        "path": "/squeezenet",
+        "name": "Squeezenet"
+    },
+    {
+        "path": "/custom-model",
+        "name": "CustomModel"
+    },
+    {
+        "path": "*",
+        "name": "404"
+    }
+]

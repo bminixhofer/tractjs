@@ -1,28 +1,20 @@
 #!/usr/bin/env sh
 
-# git checkout gh-pages && git checkout --orphan gh-pages
-# # remove last build
-# rm -rf *
-# # check out current directory on master branch
-# git checkout master -- .
+# set -e
+
+# # create new gh-pages branch
+# git branch -D gh-pages || true
+# git checkout --orphan gh-pages
 
 # build library
-source build.sh
-
-# build docs
 cd wrapper
-DOC_DIR="../docs" npm run build-docs
+npm run build
 cd ..
 
 # build demos
 cd demos
 npm ci
 npm run build
-
-## add subpages
-cp -a dist/index.html dist/squeezenet.html
-cp -a dist/index.html dist/custom-model.html
-
 cd ..
 
 # push to gh-pages branch

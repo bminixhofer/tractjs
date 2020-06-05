@@ -18,7 +18,7 @@ export default {
             format: "esm"
         },
         {
-            file: pkg.browser,
+            file: pkg.minified,
             format: "iife",
             name: "tractjs",
             plugins: [terser()]
@@ -30,7 +30,7 @@ export default {
         // import.meta does not work in a `Worker`, this is a VERY hacky way to fix wasm-pack usage of import.meta
         // TODO: open an issue in wasm-pack
         replace({
-            "include": "../pkg/tractjs_core.js",
+            "include": "core/tractjs_core.js",
             "import.meta": "'unknown'"
         }),
         workerLoader({
