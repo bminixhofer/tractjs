@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import config from "../../vue.config";
+
 export default {
   name: "App",
   components: {},
@@ -47,7 +49,7 @@ export default {
     resources: [
       {
         title: "tractjs API documentation",
-        href: "/docs",
+        href: config.publicPath + "docs",
       },
       {
         title: "tractjs on Github",
