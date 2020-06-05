@@ -1,18 +1,30 @@
 [
     {
         "path": "/",
-        "name": "Home"
+        "name": "Home",
+        "meta": {
+            "title": "tractjs"
+        }
     },
     {
         "path": "/squeezenet",
-        "name": "Squeezenet"
+        "name": "Squeezenet",
+        "meta": {
+            "title": "Squeezenet Demo - tractjs"
+        }
     },
     {
         "path": "/custom-model",
-        "name": "CustomModel"
+        "name": "CustomModel",
+        "meta": {
+            "title": "Custom Model - tractjs"
+        }
     },
     {
         "path": "*",
-        "name": "404"
+        "name": "404",
+        "meta": {
+            "title": "404 Page Not Found - tractjs"
+        }
     }
 ]

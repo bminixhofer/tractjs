@@ -26,4 +26,14 @@ const router = new VueRouter({
   routes
 });
 
+router.beforeEach((to, _, next) => {
+  const nearestWithTitle = to.matched.reverse().find(r => r.meta && r.meta.title);
+
+  if(nearestWithTitle) {
+    document.title = nearestWithTitle.meta.title;
+  }
+  
+  next();
+});
+
 export default router;

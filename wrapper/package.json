@@ -10,7 +10,7 @@
     "build": "npm run build-pkg && npm ci && npm run build-wrapper && npm run build-docs",
     "build-pkg": "wasm-pack build --release --target web --out-dir ./wrapper/core",
     "build-wrapper": "npx rollup -c && npx dts-bundle-generator -o dist/tractjs.d.ts dist/index.d.ts",
-    "build-docs": "npx typedoc --out docs dist/index.d.ts",
+    "build-docs": "npx typedoc --out docs dist/tractjs.d.ts",
     "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="body-1">
-      tract-js is an experimental Javascript library which wraps
+      tractjs is an experimental Javascript library which wraps
       <a
         href="https://github.com/snipsco/tract"
       >tract</a> compiled to WebAssembly to run ONNX models in the browser.
@@ -9,7 +9,7 @@
     <h2 class="display-1">Demos</h2>
     <div class="d-flex flex-wrap mt-2 mb-6 pl-1">
       <v-hover v-slot:default="{ hover }" v-for="(demo, i) in demos" :key="i">
-        <v-card :href="demo.href" width="300" class="ma-2 ml-0" :elevation="hover ? 4 : 2">
+        <v-card :href="demo.href" min-height="110" width="300" class="ma-2 ml-0" :elevation="hover ? 4 : 2">
           <v-card-title>{{demo.title}}</v-card-title>
           <v-card-subtitle>{{demo.text}}</v-card-subtitle>
         </v-card>
@@ -46,7 +46,11 @@ export default {
     ],
     resources: [
       {
-        title: "tract-js on Github",
+        title: "tractjs API documentation",
+        href: "/docs",
+      },
+      {
+        title: "tractjs on Github",
         href: "https://github.com/bminixhofer/tract-js"
       },
       {
