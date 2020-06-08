@@ -2727,6 +2727,21 @@ img {
 			<a href="classes/tensor.html" class="tsd-kind-icon">Tensor</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#datatype" class="tsd-kind-icon">Data<wbr>Type</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#fact" class="tsd-kind-icon">Fact</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#format" class="tsd-kind-icon">Format</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#options" class="tsd-kind-icon">Options</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#shape" class="tsd-kind-icon">Shape</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a>
 		</li>
 	</ul>
@@ -2747,6 +2762,11 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias"><a href="globals.html#datatype" class="tsd-kind-icon">Data<wbr>Type</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#fact" class="tsd-kind-icon">Fact</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#format" class="tsd-kind-icon">Format</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#options" class="tsd-kind-icon">Options</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#shape" class="tsd-kind-icon">Shape</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a></li>
 						</ul>
 					</section>
@@ -2755,6 +2775,58 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Type aliases</h2>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="datatype" class="tsd-anchor"></a>
+				<h3>Data<wbr>Type</h3>
+				<div class="tsd-signature tsd-kind-icon">Data<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"int8"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"uint8"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"int16"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"uint16"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"int32"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"uint32"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float32"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float64"</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="fact" class="tsd-anchor"></a>
+				<h3>Fact</h3>
+				<div class="tsd-signature tsd-kind-icon">Fact<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><a href="globals.html#datatype" class="tsd-signature-type">DataType</a><span class="tsd-signature-symbol">, </span><a href="globals.html#shape" class="tsd-signature-type">Shape</a><span class="tsd-signature-symbol">]</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="format" class="tsd-anchor"></a>
+				<h3>Format</h3>
+				<div class="tsd-signature tsd-kind-icon">Format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"onnx"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"tensorflow"</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="options" class="tsd-anchor"></a>
+				<h3>Options</h3>
+				<div class="tsd-signature tsd-kind-icon">Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>format<span class="tsd-signature-symbol">?: </span><a href="globals.html#format" class="tsd-signature-type">Format</a><span class="tsd-signature-symbol">; </span>inputFacts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+				<aside class="tsd-sources">
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> format<span class="tsd-signature-symbol">?: </span><a href="globals.html#format" class="tsd-signature-type">Format</a></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> input<wbr>Facts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+						</li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="shape" class="tsd-anchor"></a>
+				<h3>Shape</h3>
+				<div class="tsd-signature tsd-kind-icon">Shape<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<aside class="tsd-sources">
+				</aside>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="typedarray" class="tsd-anchor"></a>
 				<h3>Typed<wbr>Array</h3>
