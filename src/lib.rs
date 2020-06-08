@@ -1,12 +1,14 @@
-use js_sys::{Error, Uint32Array};
+use js_sys::{Array, Error, Object, Uint32Array};
 use std::io::Cursor;
 use tract_onnx::prelude::*;
+use tract_tensorflow::prelude::*;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array;
+type DataType = "int8" | "uint8" | "int16" | "uint16" | "int32" | "uint32" | "float32" | "float64";
 "#;
 
 #[wasm_bindgen]
@@ -25,6 +27,43 @@ impl<T: std::fmt::Debug> TractResultExt<T> for TractResult<T> {
             Ok(x) => Ok(x),
             Err(x) => Err(Error::new(&format!("{:#?}", x))),
         }
+    }
+}
+
+fn fact_from_js(input: JsValue) -> InferenceFact {
+    let input: Array = input.dyn_into().expect("fact must be an Array.");
+    let dtype = if let Some(string) = input.get(0).as_string() {
+        Some(match string.as_str() {
+            "int8" => i8::datum_type(),
+            "uint8" => u8::datum_type(),
+            "int16" => i16::datum_type(),
+            "uint16" => u16::datum_type(),
+            "int32" => i32::datum_type(),
+            // "uint32" => u32::datum_type(),
+            "float32" => f32::datum_type(),
+            "float64" => f64::datum_type(),
+            _ => panic!("unsupported data type"),
+        })
+    } else {
+        None
+    };
+
+    let shape = if let Ok(shape) = input.get(1).dyn_into::<Array>() {
+        Some(
+            shape
+                .iter()
+                .map(|x| x.as_f64().expect("fact[1] must be an Array of numbers.") as usize)
+                .collect::<Vec<_>>(),
+        )
+    } else {
+        None
+    };
+
+    match (dtype, shape) {
+        (Some(dtype), Some(shape)) => InferenceFact::dt_shape(dtype, shape),
+        (Some(dtype), None) => InferenceFact::dt(dtype),
+        (None, Some(shape)) => InferenceFact::shape(shape),
+        (None, None) => panic!("either dtype or shape must be specified."),
     }
 }
 
@@ -103,7 +142,7 @@ impl CoreTensor {
         make_tensor!(js_sys::Float32Array);
         make_tensor!(js_sys::Float64Array);
 
-        panic!("Could not be cast into any TypedArray object.")
+        panic!("could not be cast into any TypedArray object.")
     }
 
     pub fn data(&self) -> Result<JsValue, JsValue> {
@@ -114,7 +153,7 @@ impl CoreTensor {
                         .to_array_view()
                         .map_js_error()?
                         .as_slice()
-                        .expect("slice is not contiguous"),
+                        .expect("slice is not contiguous."),
                 )
             }};
         }
@@ -155,17 +194,60 @@ pub struct CoreModel {
 
 #[wasm_bindgen]
 impl CoreModel {
-    pub fn load(data: Vec<u8>) -> Result<CoreModel, JsValue> {
+    pub fn load(
+        data: Vec<u8>,
+        use_onnx: bool,
+        inputs: Option<Array>,
+        outputs: Option<Array>,
+        input_facts: Object,
+    ) -> Result<CoreModel, JsValue> {
         console_error_panic_hook::set_once();
 
         let mut reader = Cursor::new(data);
 
-        let model = onnx().model_for_read(&mut reader).map_js_error()?;
+        let mut model = match use_onnx {
+            true => onnx().model_for_read(&mut reader),
+            false => tensorflow().model_for_read(&mut reader),
+        }
+        .map_js_error()?;
+
+        for (index, fact) in Object::keys(&input_facts)
+            .iter()
+            .zip(Object::values(&input_facts).iter())
+        {
+            let fact = fact_from_js(fact);
+
+            model
+                .set_input_fact(
+                    index.as_f64().expect("fact index must be a number.") as usize,
+                    fact,
+                )
+                .map_js_error()?;
+        }
+
         let mut model = model.into_optimized().map_js_error()?;
 
-        model.auto_outputs().map_js_error()?;
-        let plan = SimplePlan::new(model).map_js_error()?;
+        if let Some(inputs) = inputs {
+            model
+                .set_input_names(inputs.iter().map(|x| {
+                    x.as_string()
+                        .expect("`inputs` must consist of valid strings.")
+                }))
+                .map_js_error()?;
+        }
 
+        if let Some(outputs) = outputs {
+            model
+                .set_output_names(outputs.iter().map(|x| {
+                    x.as_string()
+                        .expect("`outputs` must consist of valid strings.")
+                }))
+                .map_js_error()?;
+        } else {
+            model.auto_outputs().map_js_error()?;
+        }
+
+        let plan = SimplePlan::new(model).map_js_error()?;
         Ok(CoreModel { plan })
     }
 

@@ -880,12 +880,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "tract-tensorflow"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83cbc9ec575e6dcaad6fbb79e67a8b53f2ed3ff7ac86db4ee511348001627535"
+dependencies = [
+ "bytes",
+ "derive-new",
+ "log",
+ "prost",
+ "prost-build",
+ "prost-types",
+ "tract-hir",
+]
+
+[[package]]
 name = "tractjs-core"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
  "tract-onnx",
+ "tract-tensorflow",
  "wasm-bindgen",
  "web-sys",
 ]

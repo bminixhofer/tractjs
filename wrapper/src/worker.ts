@@ -1,4 +1,5 @@
 import { Tensor } from "./tensor";
+import type { InternalOptions } from "./options";
 import { CoreModel, CoreTensorVec, CoreTensor } from "tractjs-core";
 import init from "tractjs-core";
 import wasm from "../core/tractjs_core_bg.wasm";
@@ -32,10 +33,10 @@ class ModelStorage {
 
 const store = new ModelStorage();
 
-async function load(data: Uint8Array): Promise<number> {
+async function load(data: Uint8Array, options: InternalOptions): Promise<number> {
     await initialize;
 
-    const model = CoreModel.load(data);
+    const model = CoreModel.load(data, options.format == "onnx", options.inputs, options.outputs, options.inputFacts);
     return store.add(model);
 }
 
@@ -73,7 +74,7 @@ ctx.addEventListener("message", e => {
 
     switch (data.type) {
         case "load":
-            promise = load(data.body.data);
+            promise = load(data.body.data, data.body.options);
             break;
         case "predict":
             promise = predict(data.body.modelId, data.body.tensors);
