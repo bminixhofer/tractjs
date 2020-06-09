@@ -28,8 +28,19 @@ async function load(url: string) {
     return data;
 }
 
+/**
+ * A Tensorflow or ONNX model. 
+ * 
+ * Does not store the model directly. 
+ * The model is stored in a WebWorker which this class internally accesses via an ID.
+ */
 class Model {
     private modelId: Promise<number>;
+    /**
+     * Loads a model.
+     * @param url - The URL to load the model from. Will be passed to `fetch`.
+     * @param options - Additional options. See {@link Options} for details.
+     */
     constructor(url: string, options?: Options) {
         options = options || {};
 
@@ -64,10 +75,20 @@ class Model {
         this.modelId = (load(url).then((data) => call("load", { data, options: internalOptions })) as Promise<number>);
     }
 
-    async predict(tensors: Tensor[]): Promise<Tensor[]> {
-        return await (call("predict", { modelId: await this.modelId, tensors }) as Promise<Tensor[]>);
+    /**
+     * Runs the model on the given input. 
+     * The first call might be slower because it has to wait for model initialization to finish.
+     * @param tensors - List of input tensors.
+     * 
+     * @returns Promise for a list of output tensors.
+     */
+    async predict(inputs: Tensor[]): Promise<Tensor[]> {
+        return await (call("predict", { modelId: await this.modelId, tensors: inputs }) as Promise<Tensor[]>);
     }
 
+    /**
+     * Removes all references to the internal model allowing it to be garbage collected.
+     */
     async destroy(): Promise<void> {
         await call("destroy", { modelId: await this.modelId });
     }
