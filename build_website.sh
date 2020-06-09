@@ -17,3 +17,4 @@ cd ..
 mkdir build
 mv demos/dist/* build/
 mv wrapper/docs/ build/docs/
+mv wrapper/dist/ build/dist/
