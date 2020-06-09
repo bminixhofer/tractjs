@@ -2748,6 +2748,38 @@ img {
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
+		<div class="tsd-panel tsd-typography">
+			<a href="#tractjs" id="tractjs" style="color: inherit; text-decoration: none;">
+				<h1>tractjs</h1>
+			</a>
+			<p>Run ONNX and TensorFlow inference in the browser. An extension of <a href="https://github.com/snipsco/tract">tract</a>.</p>
+			<p><a href="https://bminixhofer.github.io/tractjs/">Website</a> | <a href="https://bminixhofer.github.io/tractjs/docs/">API Docs</a></p>
+			<a href="#status" id="status" style="color: inherit; text-decoration: none;">
+				<h2>Status</h2>
+			</a>
+			<p>tractjs is not released yet. You can, however, use it today! The <code>master</code> branch builds to <code>https://bminixhofer.github.io/tractjs/dist/</code>.
+			Here is an example:</p>
+			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://bminixhofer.github.io/tractjs/dist/tractjs.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+      <span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>);
+      model
+        .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+        .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+          <span class="hljs-built_in">console</span>.log(preds);
+        });
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+			<p>This is however <em>very</em> prone to breaking.</p>
+			<p>CommonJS and ES6 modules are built as well. See <a href="https://github.com/bminixhofer/tractjs/tree/gh-pages/dist">https://github.com/bminixhofer/tractjs/tree/gh-pages/dist</a>.</p>
+			<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
+				<h2>Roadmap</h2>
+			</a>
+			<p>See <a href="https://github.com/snipsco/tract/issues/269">https://github.com/snipsco/tract/issues/269</a>.</p>
+		</div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
