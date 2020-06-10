@@ -900,6 +900,7 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
+ "tract-core",
  "tract-onnx",
  "tract-tensorflow",
  "wasm-bindgen",
