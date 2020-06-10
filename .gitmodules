@@ -1,0 +1,6 @@
+[submodule "quality/keras_to_tensorflow"]
+	path = quality/models/keras_to_tensorflow
+	url = https://github.com/amir-abdi/keras_to_tensorflow
+[submodule "quality/models/keras_to_tensorflow"]
+	path = quality/models/keras_to_tensorflow
+	url = https://github.com/amir-abdi/keras_to_tensorflow
