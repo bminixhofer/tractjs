@@ -37,6 +37,9 @@ jobs:
       - name: Lint
         run: npm run lint
         working-directory: ${{env.working-directory}}
+      - name: Test Rust build
+      - run: cargo run --bin test_reference -- simple_onnx ../quality/tests/inputs.json ../quality/tests/outputs.json
+        working-directory: ${{env.working-directory}}
       - name: Run Cypress tests
         uses: cypress-io/github-action@v1
         with:
