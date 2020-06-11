@@ -219,7 +219,11 @@ impl CoreModel {
 
             model
                 .set_input_fact(
-                    index.as_f64().expect("fact index must be a number.") as usize,
+                    index
+                        .as_string()
+                        .unwrap()
+                        .parse::<usize>()
+                        .expect("fact index must be parsable as unsigned integer."),
                     fact,
                 )
                 .map_js_error()?;
