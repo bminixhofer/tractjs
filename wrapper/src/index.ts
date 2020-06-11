@@ -9,8 +9,8 @@ function call(type: string, body: unknown): Promise<unknown> {
   worker.postMessage({ type, body, uid });
 
   return new Promise((resolve) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (e: any) => {
-      // eslint-disable-line @typescript-eslint/no-explicit-any
       if (e.data.uid === uid) {
         worker.removeEventListener("message", handler);
         resolve(e.data.body);
