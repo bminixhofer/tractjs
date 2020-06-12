@@ -65,13 +65,13 @@ fn no_options_onnx<P1: AsRef<Path>, P2: AsRef<Path>>(
         Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.onnx") as &[u8]);
     let model = tract_onnx::onnx()
         .model_for_read(&mut cursor)?
-        .into_optimized()?;
+        .into_optimized()?
+        .into_runnable()?;
 
-    let plan = SimplePlan::new(model)?;
     let inputs = tvec![random_from_shape((1, 3, 224, 224))];
     serialize_tensors(&inputs, input_file);
 
-    let preds = plan.run(inputs)?;
+    let preds = model.run(inputs)?;
     serialize_tensors(preds, output_file);
 
     Ok(())
@@ -82,45 +82,40 @@ fn no_options_tf<P1: AsRef<Path>, P2: AsRef<Path>>(
     output_file: P2,
 ) -> TractResult<()> {
     let mut cursor = Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.pb") as &[u8]);
-    let mut model = tract_tensorflow::tensorflow().model_for_read(&mut cursor)?;
+    let model = tract_tensorflow::tensorflow()
+        .model_for_read(&mut cursor)?
+        .with_input_fact(
+            0,
+            InferenceFact::dt_shape(f32::datum_type(), tvec!(1, 227, 227, 3)),
+        )?
+        .into_optimized()?
+        .into_runnable()?;
 
-    model.set_input_fact(
-        0,
-        InferenceFact::dt_shape(f32::datum_type(), tvec!(1, 227, 227, 3)),
-    )?;
-
-    let model = model.into_optimized()?;
-
-    let plan = SimplePlan::new(model)?;
     let inputs = tvec![random_from_shape((1, 227, 227, 3))];
     serialize_tensors(&inputs, input_file);
 
-    let preds = plan.run(inputs)?;
+    let preds = model.run(inputs)?;
     serialize_tensors(preds, output_file);
 
     Ok(())
 }
 
-fn custom_input_onnx<P1: AsRef<Path>, P2: AsRef<Path>>(
+fn custom_output_onnx<P1: AsRef<Path>, P2: AsRef<Path>>(
     input_file: P1,
     output_file: P2,
 ) -> TractResult<()> {
     let mut cursor =
         Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.onnx") as &[u8]);
-    let mut model = tract_onnx::onnx().model_for_read(&mut cursor)?;
+    let model = tract_onnx::onnx()
+        .model_for_read(&mut cursor)?
+        .with_output_names(&["squeezenet0_conv8_fwd", "squeezenet0_conv9_fwd"])?
+        .into_optimized()?
+        .into_runnable()?;
 
-    model.set_input_names(&["squeezenet0_conv8_fwd", "squeezenet0_conv9_fwd"])?;
-
-    let model = model.into_optimized()?;
-
-    let plan = SimplePlan::new(model)?;
-    let inputs = tvec![
-        random_from_shape((1, 32, 27, 27)),
-        random_from_shape((1, 32, 27, 27))
-    ];
+    let inputs = tvec![random_from_shape((1, 3, 224, 224))];
     serialize_tensors(&inputs, input_file);
 
-    let preds = plan.run(inputs)?;
+    let preds = model.run(inputs)?;
     serialize_tensors(preds, output_file);
 
     Ok(())
@@ -134,7 +129,7 @@ fn main() -> TractResult<()> {
     match name.as_str() {
         "simple_onnx" => no_options_onnx(input_file, output_file)?,
         "simple_tf" => no_options_tf(input_file, output_file)?,
-        "custom_input_onnx" => custom_input_onnx(input_file, output_file)?,
+        "custom_output_onnx" => custom_output_onnx(input_file, output_file)?,
         _ => panic!(format!("unknown name {}.", name)),
     };
 

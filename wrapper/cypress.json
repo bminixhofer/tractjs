@@ -5,5 +5,6 @@
   "integrationFolder": "../quality/tests/",
   "testFiles": "**/*.js",
   "baseUrl": "http://localhost:8000",
-  "video": false
+  "video": false,
+  "responseTimeout": 60000
 }

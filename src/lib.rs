@@ -189,7 +189,7 @@ impl From<CoreTensor> for Tensor {
 
 #[wasm_bindgen]
 pub struct CoreModel {
-    plan: TypedSimplePlan<TypedModel>,
+    model: TypedSimplePlan<TypedModel>,
 }
 
 #[wasm_bindgen]
@@ -229,8 +229,6 @@ impl CoreModel {
                 .map_js_error()?;
         }
 
-        let mut model = model.into_optimized().map_js_error()?;
-
         if let Some(inputs) = inputs {
             model
                 .set_input_names(inputs.iter().map(|x| {
@@ -247,16 +245,19 @@ impl CoreModel {
                         .expect("`outputs` must consist of valid strings.")
                 }))
                 .map_js_error()?;
-        } else {
-            model.auto_outputs().map_js_error()?;
         }
 
-        let plan = SimplePlan::new(model).map_js_error()?;
-        Ok(CoreModel { plan })
+        let model = model
+            .into_optimized()
+            .map_js_error()?
+            .into_runnable()
+            .map_js_error()?;
+
+        Ok(CoreModel { model })
     }
 
     pub fn predict(&self, data: CoreTensorVec) -> Result<CoreTensorVec, JsValue> {
-        let outputs = self.plan.run(data.into_tvec()).map_js_error()?;
+        let outputs = self.model.run(data.into_tvec()).map_js_error()?;
         Ok(CoreTensorVec::from_slice(&outputs))
     }
 }

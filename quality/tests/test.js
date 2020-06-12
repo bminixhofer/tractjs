@@ -14,7 +14,7 @@ function get_data(window, name) {
 }
 
 function round(x) {
-  return Math.round(x * 100) / 100;
+  return Math.round(x * 200) / 200;
 }
 
 function predictAndCompare(model, inputs, refOutputs) {
@@ -23,11 +23,12 @@ function predictAndCompare(model, inputs, refOutputs) {
       assert.equal(outputs.length, refOutputs.length);
 
       for (let i = 0; i < outputs.length; i++) {
-        assert.deepEqual(
-          Array.from(outputs[i].data).map(round),
-          refOutputs[i].data.map(round)
-        );
+        assert.equal(outputs[i].data.length, refOutputs[i].data.length);
         assert.deepEqual(outputs[i].shape, refOutputs[i].shape);
+
+        for (let j = 0; j < outputs[i].data; j++) {
+          assert.equal(round(outputs[i].data[j], round(refOutputs[i].data[j])));
+        }
       }
     })
   );
@@ -69,6 +70,32 @@ it("can run TF model (with input facts)", () => {
           inputFacts: {
             0: ["float32", [1, 227, 227, 3]],
           },
+        }
+      );
+
+      const inputs = refInputs.map((refInput) => {
+        return new tractjs.Tensor(
+          new Float32Array(refInput.data),
+          refInput.shape
+        );
+      });
+
+      predictAndCompare(model, inputs, refOutputs);
+    });
+  });
+});
+
+it("can run ONNX model (with custom outputs)", () => {
+  cy.visit("/quality/tests/index.html");
+
+  cy.window().then((window) => {
+    const tractjs = window.tractjs;
+
+    get_data(window, "custom_output_onnx").then(([refInputs, refOutputs]) => {
+      const model = new tractjs.Model(
+        "/quality/models/data/squeezenet_1_1/model.onnx",
+        {
+          outputs: ["squeezenet0_conv8_fwd", "squeezenet0_conv9_fwd"],
         }
       );
 
