@@ -1,6 +1,6 @@
 # tractjs
 
-Run ONNX and TensorFlow inference in the browser. An extension of [tract](https://github.com/snipsco/tract).
+Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of [tract](https://github.com/snipsco/tract).
 
 [Website](https://bminixhofer.github.io/tractjs/) | [API Docs](https://bminixhofer.github.io/tractjs/docs/)
 
