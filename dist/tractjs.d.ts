@@ -26,6 +26,10 @@ export declare type Options = {
 	 */
 	format?: Format;
 	/**
+	 * Whether to optimize the model. Currently only works if the input shape is fully determined. If you need e. g. dynamic batch sizes set this to `false`. `true` by default.
+	 */
+	optimize?: boolean;
+	/**
 	 * The node names of model inputs. Passed to [`set_input_names`](https://docs.rs/tract-core/0.7.0/tract_core/model/struct.ModelImpl.html#method.set_input_names).
 	 */
 	inputs?: Array<string>;

@@ -2831,7 +2831,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="options" class="tsd-anchor"></a>
 				<h3>Options</h3>
-				<div class="tsd-signature tsd-kind-icon">Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>format<span class="tsd-signature-symbol">?: </span><a href="globals.html#format" class="tsd-signature-type">Format</a><span class="tsd-signature-symbol">; </span>inputFacts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+				<div class="tsd-signature tsd-kind-icon">Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>format<span class="tsd-signature-symbol">?: </span><a href="globals.html#format" class="tsd-signature-type">Format</a><span class="tsd-signature-symbol">; </span>inputFacts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>optimize<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2863,6 +2863,14 @@ img {
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>The node names of model inputs. Passed to <a href="https://docs.rs/tract-core/0.7.0/tract_core/model/struct.ModelImpl.html#method.set_input_names"><code>set_input_names</code></a>.</p>
+								</div>
+							</div>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> optimize<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Whether to optimize the model. Currently only works if the input shape is fully determined. If you need e. g. dynamic batch sizes set this to <code>false</code>. <code>true</code> by default.</p>
 								</div>
 							</div>
 						</li>
