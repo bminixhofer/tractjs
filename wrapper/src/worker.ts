@@ -42,6 +42,7 @@ async function load(
   const model = CoreModel.load(
     data,
     options.format == "onnx",
+    options.optimize,
     options.inputs,
     options.outputs,
     options.inputFacts

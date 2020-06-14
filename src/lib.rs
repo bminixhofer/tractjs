@@ -1,5 +1,6 @@
 use js_sys::{Array, Error, Object, Uint32Array};
 use std::io::Cursor;
+use tract_hir::prelude::*;
 use tract_onnx::prelude::*;
 use tract_tensorflow::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -39,7 +40,6 @@ fn fact_from_js(input: JsValue) -> InferenceFact {
             "int16" => i16::datum_type(),
             "uint16" => u16::datum_type(),
             "int32" => i32::datum_type(),
-            // "uint32" => u32::datum_type(),
             "float32" => f32::datum_type(),
             "float64" => f64::datum_type(),
             _ => panic!("unsupported data type"),
@@ -132,13 +132,13 @@ impl CoreTensor {
 
         // must support all TypedArray objects, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
         // BigInt64Array and BigUint64Array are not supported because of no support in js_sys
+        // Uint32Array is not supported because of no support in tract
         make_tensor!(js_sys::Int8Array);
         make_tensor!(js_sys::Uint8Array);
         make_tensor!(js_sys::Uint8ClampedArray);
         make_tensor!(js_sys::Int16Array);
         make_tensor!(js_sys::Uint16Array);
         make_tensor!(js_sys::Int32Array);
-        // make_tensor!(js_sys::Uint32Array); TODO: clarify why no u32
         make_tensor!(js_sys::Float32Array);
         make_tensor!(js_sys::Float64Array);
 
@@ -187,9 +187,35 @@ impl From<CoreTensor> for Tensor {
     }
 }
 
+enum Model {
+    Inference(tract_hir::infer::InferenceSimplePlan<InferenceModel>),
+    Typed(TypedSimplePlan<TypedModel>),
+}
+
+impl Model {
+    fn run(&self, inputs: TVec<Tensor>) -> TractResult<TVec<Arc<Tensor>>> {
+        match self {
+            Model::Inference(x) => x.run(inputs),
+            Model::Typed(x) => x.run(inputs),
+        }
+    }
+}
+
+impl From<tract_hir::infer::InferenceSimplePlan<InferenceModel>> for Model {
+    fn from(input: tract_hir::infer::InferenceSimplePlan<InferenceModel>) -> Self {
+        Model::Inference(input)
+    }
+}
+
+impl From<TypedSimplePlan<TypedModel>> for Model {
+    fn from(input: TypedSimplePlan<TypedModel>) -> Self {
+        Model::Typed(input)
+    }
+}
+
 #[wasm_bindgen]
 pub struct CoreModel {
-    model: TypedSimplePlan<TypedModel>,
+    model: Model,
 }
 
 #[wasm_bindgen]
@@ -197,6 +223,7 @@ impl CoreModel {
     pub fn load(
         data: Vec<u8>,
         use_onnx: bool,
+        optimize: bool,
         inputs: Option<Array>,
         outputs: Option<Array>,
         input_facts: Object,
@@ -205,9 +232,10 @@ impl CoreModel {
 
         let mut reader = Cursor::new(data);
 
-        let mut model = match use_onnx {
-            true => onnx().model_for_read(&mut reader),
-            false => tensorflow().model_for_read(&mut reader),
+        let mut model = if use_onnx {
+            onnx().model_for_read(&mut reader)
+        } else {
+            tensorflow().model_for_read(&mut reader)
         }
         .map_js_error()?;
 
@@ -247,11 +275,16 @@ impl CoreModel {
                 .map_js_error()?;
         }
 
-        let model = model
-            .into_optimized()
-            .map_js_error()?
-            .into_runnable()
-            .map_js_error()?;
+        let model: Model = if optimize {
+            model
+                .into_optimized()
+                .map_js_error()?
+                .into_runnable()
+                .map_js_error()?
+                .into()
+        } else {
+            model.into_runnable().map_js_error()?.into()
+        };
 
         Ok(CoreModel { model })
     }

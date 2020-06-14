@@ -985,6 +985,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tract-core",
+ "tract-hir",
  "tract-onnx",
  "tract-tensorflow",
  "wasm-bindgen",

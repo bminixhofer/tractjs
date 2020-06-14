@@ -9,10 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "tractjs": "file:../wrapper",
     "vue": "^2.6.11",
+    "vue-plotly": "^1.1.0",
     "vue-router": "^3.2.0",
-    "vuetify": "^2.2.11",
-    "tractjs": "file:../wrapper"
+    "vuetify": "^2.2.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

@@ -70,9 +70,10 @@ class Model {
     // cast to fully-determined internal options so worker doesn't have to worry about properties being undefined
     const internalOptions: InternalOptions = {
       format: options.format,
+      optimize: options.optimize !== undefined ? options.optimize : true,
       inputs: options.inputs,
       outputs: options.outputs,
-      inputFacts: options.inputFacts || {},
+      inputFacts: options.inputFacts !== undefined ? options.inputFacts : {},
     };
 
     this.modelId = load(url).then((data) =>
