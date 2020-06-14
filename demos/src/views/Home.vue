@@ -4,8 +4,6 @@
       Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of
       <a href="https://github.com/snipsco/tract">tract</a>.
     </p>
-    <h2 class="display-1">Benchmarks</h2>
-    <Benches />
     <h2 class="display-1">Demos</h2>
     <div class="d-flex flex-wrap mt-2 mb-6 pl-1">
       <v-hover v-slot:default="{ hover }" v-for="(demo, i) in demos" :key="i">
@@ -21,6 +19,8 @@
         </v-card>
       </v-hover>
     </div>
+    <h2 class="display-1">Benchmarks</h2>
+    <Benches />
     <h2 class="display-1">Resources</h2>
     <v-list>
       <v-list-item v-for="(resource, i) in resources" :key="i" class="pa-0">

@@ -63,11 +63,20 @@ export default {
           titlefont: {
             size: 12,
           },
+          margin: {
+            l: 50,
+            r: 50,
+          },
           width: 400,
           height: 400,
           title: bench.title,
           yaxis: {
             ticksuffix: "ms",
+          },
+          xaxis: {
+            tickfont: {
+              size: 10,
+            },
           },
         },
       };
