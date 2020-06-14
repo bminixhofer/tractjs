@@ -27,6 +27,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
+      - name: Install Tensorflow.js Converter
+        run: pip install tensorflowjs
       - name: Download models
         run: ./download_models.sh
         working-directory: quality/models
