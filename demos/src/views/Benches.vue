@@ -21,8 +21,6 @@
 import { Plotly } from "vue-plotly";
 import benchData from "../../../quality/benches/benches.json";
 
-console.log(benchData);
-
 export default {
   components: {
     Plotly,

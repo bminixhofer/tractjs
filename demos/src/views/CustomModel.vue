@@ -5,6 +5,18 @@
       <v-container class="input">
         <v-row>
           <v-col class="input-name">
+            <h2>Format</h2>
+          </v-col>
+          <v-col>
+            <v-select
+              v-model="format"
+              :items="formats"
+              class="small-input"
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="input-name">
             <h2>Model</h2>
           </v-col>
           <v-col>
@@ -99,6 +111,7 @@ export default {
       integer: (value) =>
         (value == parseInt(value) && value >= 0) || "Must be >= 0.",
     },
+    formats: ["tensorflow", "onnx"],
     dataTypes: {
       float32: {
         data: Float32Array,
@@ -111,6 +124,7 @@ export default {
     model: null,
     valid: false,
     dataType: "float32",
+    format: "onnx",
     initializer: "all zeros",
     rank: 3,
     shape: [],
@@ -134,7 +148,9 @@ export default {
     async file() {
       const url = URL.createObjectURL(this.file);
 
-      this.model = await new tractjs.Model(url);
+      this.model = await new tractjs.Model(url, {
+        format: this.format,
+      });
     },
   },
   computed: {
