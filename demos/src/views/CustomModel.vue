@@ -46,7 +46,11 @@
             <h2>Data type</h2>
           </v-col>
           <v-col>
-            <v-select v-model="dataType" :items="Object.keys(dataTypes)" class="small-input"></v-select>
+            <v-select
+              v-model="dataType"
+              :items="Object.keys(dataTypes)"
+              class="small-input"
+            ></v-select>
           </v-col>
         </v-row>
         <v-row>
@@ -69,15 +73,18 @@
       color="primary"
       class="align-self-center"
       x-large
-    >Predict</v-btn>
+      >Predict</v-btn
+    >
     <v-container class="output" v-if="output">
       <v-row>
         <v-col class="body-1 font-weight-bold ma-0">Inference time:</v-col>
-        <v-col class="text-right">{{Math.round(output.time)}}ms</v-col>
+        <v-col class="text-right">{{ Math.round(output.time) }}ms</v-col>
       </v-row>
       <v-row>
         <v-col class="body-1 font-weight-bold ma-0">Output shape:</v-col>
-        <v-col class="text-right">{{'(' + output.shape.join(', ') + ')'}}</v-col>
+        <v-col class="text-right">{{
+          "(" + output.shape.join(", ") + ")"
+        }}</v-col>
       </v-row>
     </v-container>
   </div>
@@ -89,16 +96,16 @@ import * as tractjs from "tractjs";
 export default {
   data: () => ({
     rules: {
-      integer: value =>
-        (value == parseInt(value) && value >= 0) || "Must be >= 0."
+      integer: (value) =>
+        (value == parseInt(value) && value >= 0) || "Must be >= 0.",
     },
     dataTypes: {
       float32: {
         data: Float32Array,
         initializers: {
-          "all zeros": () => 0
-        }
-      }
+          "all zeros": () => 0,
+        },
+      },
     },
     file: null,
     model: null,
@@ -107,7 +114,7 @@ export default {
     initializer: "all zeros",
     rank: 3,
     shape: [],
-    output: null
+    output: null,
   }),
   watch: {
     rank: {
@@ -115,29 +122,29 @@ export default {
       handler() {
         while (this.rank > this.shape.length) {
           this.shape.push({
-            value: 1
+            value: 1,
           });
         }
 
         while (Math.max(this.rank, 0) < this.shape.length) {
           this.shape.pop();
         }
-      }
+      },
     },
     async file() {
       const url = URL.createObjectURL(this.file);
 
       this.model = await new tractjs.Model(url);
-    }
+    },
   },
   computed: {
     canRun() {
       return this.model !== null && this.valid;
-    }
+    },
   },
   methods: {
     async run() {
-      const shape = this.shape.map(dim => dim.value);
+      const shape = this.shape.map((dim) => dim.value);
       const nInputs = shape.reduce((a, b) => a * b, 1);
       const data = new this.dataTypes[this.dataType].data(nInputs);
 
@@ -148,11 +155,11 @@ export default {
 
       this.output = {
         time: endTime - startTime,
-        shape: tensorOutput.shape
+        shape: tensorOutput.shape,
       };
-    }
+    },
   },
-  name: "CustomModelDemo"
+  name: "CustomModelDemo",
 };
 </script>
 
