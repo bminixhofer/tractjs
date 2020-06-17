@@ -6,5 +6,9 @@
   "testFiles": "**/*.js",
   "baseUrl": "http://localhost:8000",
   "video": false,
-  "responseTimeout": 60000
+  "responseTimeout": 60000,
+  "firefoxGcInterval": {
+    "runMode": null,
+    "openMode": null
+  }
 }
