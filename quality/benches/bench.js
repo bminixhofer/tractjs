@@ -1,3 +1,8 @@
+import * as onnx from "onnxjs";
+import * as tf from "@tensorflow/tfjs";
+import * as tractjs from "tractjs";
+import { saveAs } from "file-saver";
+
 class TractjsModel {
   constructor(url, options) {
     this.model = new tractjs.Model(url, options);
@@ -17,7 +22,7 @@ class ONNXJSModel {
   async run(data, shape) {
     await this.modelLoaded;
 
-    const inputs = [new Tensor(data, "float32", shape)];
+    const inputs = [new onnx.Tensor(data, "float32", shape)];
 
     return await this.session.run(inputs);
   }
@@ -59,7 +64,7 @@ async function bench_byte_sb_lstm(batchSize) {
     () => Math.random() * 256
   );
   const shape = [batchSize, length];
-  const n = 15;
+  const n = 10;
   const results = {};
 
   results["tractjs"] = await bench(
@@ -88,8 +93,9 @@ async function bench_byte_sb_lstm(batchSize) {
   );
 
   // ONNX.js does not support LSTMs
-  results["ONNX.js (CPU)"] = new Array(n).fill(NaN);
-  results["ONNX.js (WebGL)"] = new Array(n).fill(NaN);
+  results["O̶N̶N̶X̶.̶j̶s̶ ̶(̶C̶P̶U̶)̶"] = new Array(n).fill(NaN);
+  results["O̶N̶N̶X̶.̶j̶s̶ ̶(̶W̶A̶S̶M̶)̶"] = new Array(n).fill(NaN);
+  results["O̶N̶N̶X̶.̶j̶s̶ ̶(̶W̶e̶b̶G̶L̶)̶"] = new Array(n).fill(NaN);
   return results;
 }
 
@@ -98,7 +104,7 @@ async function bench_squeezenet(batchSize) {
     Math.random()
   );
   let shape = [batchSize, 3, 224, 224];
-  const n = 15;
+  const n = 10;
   const results = {};
 
   results["tractjs"] = await bench(
@@ -141,6 +147,15 @@ async function bench_squeezenet(batchSize) {
     n
   );
 
+  results["ONNX.js (WASM)"] = await bench(
+    new ONNXJSModel("/quality/models/data/squeezenet_1_1/model.onnx", {
+      backendHint: "wasm",
+    }),
+    data,
+    shape,
+    n
+  );
+
   results["ONNX.js (WebGL)"] = await bench(
     new ONNXJSModel("/quality/models/data/squeezenet_1_1/model.onnx", {
       backendHint: "webgl",
@@ -154,24 +169,24 @@ async function bench_squeezenet(batchSize) {
 }
 
 async function run() {
-  benches = {};
+  const benches = {};
   benches.userAgent = navigator.userAgent;
   benches.date = new Date().toString();
   benches.results = [];
 
-  bench1 = {};
+  const bench1 = {};
   bench1["title"] =
     "Sentence boundary detection LSTM<br>(bidirectional) (batch size 1)";
   bench1["results"] = await bench_byte_sb_lstm(1);
   benches.results.push(bench1);
 
-  bench2 = {};
+  const bench2 = {};
   bench2["title"] =
     "Sentence boundary detection LSTM<br>(bidirectional) (batch size 16)";
   bench2["results"] = await bench_byte_sb_lstm(16);
   benches.results.push(bench2);
 
-  bench3 = {};
+  const bench3 = {};
   bench3["title"] = "Squeezenet v1.1<br>(batch size 1)";
   bench3["results"] = await bench_squeezenet(1);
   benches.results.push(bench3);

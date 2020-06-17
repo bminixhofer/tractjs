@@ -6,13 +6,15 @@
           <h1 class="white--text font-weight-regular">tractjs</h1>
         </router-link>
       </div>
-      <v-spacer /><a href="https://github.com/bminixhofer/tractjs"
-        ><v-img
+      <v-spacer />
+      <a href="https://github.com/bminixhofer/tractjs">
+        <v-img
           alt="bminixhofer/tractjs on Github"
           max-height="2.4rem"
           max-width="2.4rem"
           src="./assets/GitHub-Mark.svg"
-      /></a>
+        />
+      </a>
     </v-app-bar>
 
     <v-content class="ma-4">

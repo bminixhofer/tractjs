@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p class="ma-0 mt-2">
-      Notes: ONNX.js does not support LSTMs. tractjs only utilizes CPU.
-    </p>
+    <p class="ma-0 mt-2">Notes: ONNX.js does not support LSTMs. tractjs only utilizes CPU.</p>
     <div class="d-flex flex-wrap mb-6 justify-center">
       <Plotly
         v-for="(bench, i) in benches"
@@ -25,17 +23,17 @@ console.log(benchData);
 
 export default {
   components: {
-    Plotly,
+    Plotly
   },
   data: () => ({
     userAgent: benchData.userAgent,
     benchDate: benchData.date,
-    benches: benchData.results.map((bench) => {
+    benches: benchData.results.map(bench => {
       let x = Object.keys(bench.results);
-      let y = Object.values(bench.results).map((values) => {
+      let y = Object.values(bench.results).map(values => {
         return values.reduce((a, b) => a + b, 0) / values.length;
       });
-      let errorY = Object.values(bench.results).map((values) => {
+      let errorY = Object.values(bench.results).map(values => {
         const mean = values.reduce((a, b) => a + b, 0) / values.length;
         const stddev =
           values.reduce((a, x) => a + Math.pow(x - mean, 2), 0) / values.length;
@@ -51,37 +49,44 @@ export default {
             error_y: {
               type: "data",
               array: errorY,
-              visible: true,
+              visible: true
             },
             marker: {
-              color: ["#66BB6A", "#4372C1", "#4372C1", "#F44336", "#F44336"],
+              color: [
+                "#66BB6A",
+                "#4372C1",
+                "#4372C1",
+                "#F44336",
+                "#F44336",
+                "#F44336"
+              ]
             },
-            type: "bar",
-          },
+            type: "bar"
+          }
         ],
         layout: {
           titlefont: {
-            size: 12,
+            size: 12
           },
           margin: {
             l: 50,
-            r: 50,
+            r: 50
           },
           width: 400,
           height: 400,
           title: bench.title,
           yaxis: {
-            ticksuffix: "ms",
+            ticksuffix: "ms"
           },
           xaxis: {
             tickfont: {
-              size: 10,
-            },
-          },
-        },
+              size: 10
+            }
+          }
+        }
       };
-    }),
-  }),
+    })
+  })
 };
 </script>
 
