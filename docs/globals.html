@@ -2765,7 +2765,7 @@ img {
 				<li>tractjs is maintained. At the time of writing the last significant commit to ONNX.js was more than one year ago.</li>
 				<li>tractjs is more convenient to use. It can build to a single file <code>tractjs.min.js</code> which contains the inlined WASM and WebWorker. The WASM backend of ONNX.js can not as easily be used without a build system.</li>
 			</ul>
-			<p>There are however also some downsides to tractjs. See the <a href="#faq">FAQ</a>. </p>
+			<p>There are however also some downsides to tractjs. See the <a href="#faq">FAQ</a>.</p>
 			<a href="#status" id="status" style="color: inherit; text-decoration: none;">
 				<h2>Status</h2>
 			</a>
@@ -2795,7 +2795,7 @@ img {
 				<h2>FAQ</h2>
 			</a>
 			<p><strong>What about size?</strong></p>
-			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too. </p>
+			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.</p>
 			<p>If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.</p>
 			<p><strong>What about WebGL / WebNN support?</strong></p>
 			<p>tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.</p>
@@ -2803,10 +2803,28 @@ img {
 			<p>For some (mainly tensorflow) models tract needs information about the shape of the input to run inference. In that case, you can pass information about the input datatype and shape as an <em>input fact</em> like this:</p>
 			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
   <span class="hljs-attr">inputFacts</span>: {
-    <span class="hljs-number">0</span>: [<span class="hljs-string">"float32"</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]]
-  }
+    <span class="hljs-number">0</span>: [<span class="hljs-string">"float32"</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]],
+  },
 });</code></pre>
 			<p>Also check out the <a href="https://bminixhofer.github.io/tractjs/docs/">API docs</a>.</p>
+			<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+				<h2>License</h2>
+			</a>
+			<a href="#apache-20mit" id="apache-20mit" style="color: inherit; text-decoration: none;">
+				<h3>Apache 2.0/MIT</h3>
+			</a>
+			<p>All original work licensed under either of</p>
+			<ul>
+				<li>Apache License, Version 2.0 (<a href="LICENSE-APACHE">LICENSE-APACHE</a> or <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</li>
+				<li>MIT license (<a href="LICENSE-MIT">LICENSE-MIT</a> or <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a>)
+				at your option.</li>
+			</ul>
+			<a href="#contribution" id="contribution" style="color: inherit; text-decoration: none;">
+				<h3>Contribution</h3>
+			</a>
+			<p>Unless you explicitly state otherwise, any contribution intentionally submitted
+				for inclusion in the work by you, as defined in the Apache-2.0 license, shall
+			be dual licensed as above, without any additional terms or conditions.</p>
 		</div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
