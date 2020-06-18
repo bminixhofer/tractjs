@@ -2754,6 +2754,16 @@ img {
 			</a>
 			<p>Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of <a href="https://github.com/snipsco/tract">tract</a>.</p>
 			<p><a href="https://bminixhofer.github.io/tractjs/">Website</a> | <a href="https://bminixhofer.github.io/tractjs/docs/">API Docs</a></p>
+			<a href="#why-tractjs-instead-of-onnxjs" id="why-tractjs-instead-of-onnxjs" style="color: inherit; text-decoration: none;">
+				<h2>Why tractjs instead of ONNX.js?</h2>
+			</a>
+			<p>There is currently one other usable ONNX runner for the browser, <a href="https://github.com/microsoft/onnxjs">ONNX.js</a>. There are a couple of things tractjs does better:</p>
+			<ul>
+				<li>tractjs supports more operators. LSTMs (even bidirectional) are supported, while ONNX.js does not support any recurrent networks.</li>
+				<li>tractjs is maintained. At the time of writing the last significant commit to ONNX.js was more than one year ago.</li>
+				<li>tractjs is more convenient to use. It can build to a single file <code>tractjs.min.js</code> which contains the inlined WASM and WebWorker. The WASM backend of ONNX.js can not as easily be used without a build system.</li>
+			</ul>
+			<p>There are however also some downsides to tractjs. See the <a href="#faq">FAQ</a>. </p>
 			<a href="#status" id="status" style="color: inherit; text-decoration: none;">
 				<h2>Status</h2>
 			</a>
@@ -2779,6 +2789,22 @@ img {
 				<h2>Roadmap</h2>
 			</a>
 			<p>See <a href="https://github.com/snipsco/tract/issues/269">https://github.com/snipsco/tract/issues/269</a>.</p>
+			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
+				<h2>FAQ</h2>
+			</a>
+			<p><strong>What about size?</strong></p>
+			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too. </p>
+			<p>If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.</p>
+			<p><strong>What about WebGL / WebNN support?</strong></p>
+			<p>tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.</p>
+			<p><strong>What are input facts?</strong></p>
+			<p>For some (mainly tensorflow) models tract needs information about the shape of the input to run inference. In that case, you can pass information about the input datatype and shape as an <em>input fact</em> like this:</p>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
+  <span class="hljs-attr">inputFacts</span>: {
+    <span class="hljs-number">0</span>: [<span class="hljs-string">"float32"</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]]
+  }
+});</code></pre>
+			<p>Also check out the <a href="https://bminixhofer.github.io/tractjs/docs/">API docs</a>.</p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
