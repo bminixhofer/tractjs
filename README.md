@@ -1,5 +1,8 @@
 # tractjs
 
+![Test](https://github.com/bminixhofer/tractjs/workflows/Test/badge.svg)
+![Deploy to Github Pages](https://github.com/bminixhofer/tractjs/workflows/Deploy%20to%20Github%20Pages/badge.svg)
+
 Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of [tract](https://github.com/snipsco/tract).
 
 [Website](https://bminixhofer.github.io/tractjs/) | [API Docs](https://bminixhofer.github.io/tractjs/docs/)
