@@ -110,3 +110,32 @@ it("can run ONNX model (with custom outputs)", () => {
     });
   });
 });
+
+it("can run TF model (with custom inputs)", () => {
+  cy.visit("/quality/tests/index.html");
+
+  cy.window().then((window) => {
+    const tractjs = window.tractjs;
+
+    get_data(window, "custom_input_tf").then(([refInputs, refOutputs]) => {
+      const model = new tractjs.Model(
+        "/quality/models/data/squeezenet_1_1/model.pb",
+        {
+          inputFacts: {
+            0: ["float32", [1, 227, 227, 3]],
+          },
+          inputs: ["fire5/relu_expand1x1/Relu", "fire5/relu_expand3x3/Relu"],
+        }
+      );
+
+      const inputs = refInputs.map((refInput) => {
+        return new tractjs.Tensor(
+          new Float32Array(refInput.data),
+          refInput.shape
+        );
+      });
+
+      predictAndCompare(model, inputs, refOutputs);
+    });
+  });
+});

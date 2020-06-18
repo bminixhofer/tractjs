@@ -121,6 +121,31 @@ fn custom_output_onnx<P1: AsRef<Path>, P2: AsRef<Path>>(
     Ok(())
 }
 
+fn custom_input_tf<P1: AsRef<Path>, P2: AsRef<Path>>(
+    input_file: P1,
+    output_file: P2,
+) -> TractResult<()> {
+    let mut cursor =
+        Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.pb") as &[u8]);
+    let model = tract_tensorflow::tensorflow()
+        .model_for_read(&mut cursor)?
+        .with_input_fact(
+            0,
+            InferenceFact::dt_shape(f32::datum_type(), tvec!(1, 227, 227, 3)),
+        )?
+        .with_input_names(&["fire5/relu_expand1x1/Relu", "fire5/relu_expand3x3/Relu"])?
+        .into_optimized()?
+        .into_runnable()?;
+
+    let inputs = tvec![random_from_shape((1, 27, 27, 128)), random_from_shape((1, 27, 27, 128))];
+    serialize_tensors(&inputs, input_file);
+
+    let preds = model.run(inputs)?;
+    serialize_tensors(preds, output_file);
+
+    Ok(())
+}
+
 fn main() -> TractResult<()> {
     let args: Vec<String> = env::args().collect();
     let name = &args[1];
@@ -130,6 +155,7 @@ fn main() -> TractResult<()> {
         "simple_onnx" => no_options_onnx(input_file, output_file)?,
         "simple_tf" => no_options_tf(input_file, output_file)?,
         "custom_output_onnx" => custom_output_onnx(input_file, output_file)?,
+        "custom_input_tf" => custom_input_tf(input_file, output_file)?,
         _ => panic!(format!("unknown name {}.", name)),
     };
 
