@@ -26,7 +26,7 @@ There are however also some downsides to tractjs. See the [FAQ](#faq).
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="https://bminixhofer.github.io/tractjs/dist/tractjs.min.js"></script>
+    <script src="https://unpkg.com/tractjs/dist/tractjs.min.js"></script>
     <script>
       const model = new tractjs.Model("path/to/your/model");
       model
