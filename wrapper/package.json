@@ -12,7 +12,8 @@
     "build-wrapper": "npx rollup -c && npx dts-bundle-generator -o dist/tractjs.d.ts dist/index.d.ts",
     "build-docs": "npx typedoc --out docs dist/tractjs.d.ts",
     "lint": "npx eslint .",
-    "test": ""
+    "test": "npx cypress run",
+    "publish": "npm run build && cp -a ../README.md README.md && np"
   },
   "repository": {
     "type": "git",
