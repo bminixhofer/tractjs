@@ -1,6 +1,6 @@
 {
   "name": "tractjs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A library for running ONNX and TensorFlow inference in the browser.",
   "main": "dist/tractjs.js",
   "module": "dist/tractjs.esm.js",
@@ -13,7 +13,7 @@
     "build-docs": "npx typedoc --out docs dist/tractjs.d.ts",
     "lint": "npx eslint .",
     "test": "npx cypress run",
-    "prepublishOnly": "npm run build && cp -a ../README.md"
+    "prepublishOnly": "npm run build && cp -a ../README.md README.md"
   },
   "repository": {
     "type": "git",
