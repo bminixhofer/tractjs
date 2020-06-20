@@ -1,5 +1,6 @@
 # tractjs
 
+![https://www.npmjs.com/package/tractjs](https://img.shields.io/npm/v/tractjs)
 ![Test](https://github.com/bminixhofer/tractjs/workflows/Test/badge.svg)
 ![Deploy to Github Pages](https://github.com/bminixhofer/tractjs/workflows/Deploy%20to%20Github%20Pages/badge.svg)
 
@@ -17,10 +18,9 @@ There is currently one other usable ONNX runner for the browser, [ONNX.js](https
 
 There are however also some downsides to tractjs. See the [FAQ](#faq).
 
-## Status
+## Getting started
 
-tractjs is not released yet. You can, however, use it today! The `master` branch builds to `https://bminixhofer.github.io/tractjs/dist/`.
-Here is an example:
+### Without a bundler
 
 ```html
 <html>
@@ -39,15 +39,52 @@ Here is an example:
 </html>
 ```
 
-This is however _very_ prone to breaking.
+### With a bundler
 
-CommonJS and ES6 modules are built as well. See https://github.com/bminixhofer/tractjs/tree/gh-pages/dist.
+```
+npm install tractjs
+```
 
-## Roadmap
+```js
+import * as tractjs from "tractjs";
 
-See https://github.com/snipsco/tract/issues/269.
+const model = new tractjs.Model("path/to/your/model");
+model
+  .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
+  .then((preds) => {
+    console.log(preds);
+  });
+```
 
 ## FAQ
+
+**My model with dynamic input dimensions doesn't work. Why?**
+
+Currently, tract requires fully determined input dimensions to optimize a model. There are two options:
+
+1. Turn `optimize` off:
+
+```js
+const model = new tractjs.Model("path/to/your/model", {
+  optimize: false,
+});
+```
+
+This will however *significantly* impact performance.
+
+2. Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:
+
+```js
+const model = new tractjs.Model("path/to/your/model", {
+  inputFacts: {
+    0: ["float32", [1, 3, 224, 224]],
+  },
+});
+```
+
+Be aware that the model will only work properly with inputs of this exact shape though.
+
+There is ongoing work in tract to allow dynamically sized inputs.
 
 **What about size?**
 
@@ -59,19 +96,9 @@ If you are working on a very size-sensitive application, get in touch and we can
 
 tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.
 
-**What are input facts?**
+**Why do I still get some output back when passing an input with invalid shape / rank?**
 
-For some (mainly tensorflow) models tract needs information about the shape of the input to run inference. In that case, you can pass information about the input datatype and shape as an _input fact_ like this:
-
-```js
-const model = new tractjs.Model("path/to/your/model", {
-  inputFacts: {
-    0: ["float32", [1, 3, 224, 224]],
-  },
-});
-```
-
-Also check out the [API docs](https://bminixhofer.github.io/tractjs/docs/).
+Currently tract does not do much error handling in regard to input dimensionality. So most of the time you will get some output back, it will just not be correct. There is ongoing work in tract to be more strict about input dimensionality.
 
 ## License
 
