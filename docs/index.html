@@ -2752,7 +2752,8 @@ img {
 			<a href="#tractjs" id="tractjs" style="color: inherit; text-decoration: none;">
 				<h1>tractjs</h1>
 			</a>
-			<p><img src="https://github.com/bminixhofer/tractjs/workflows/Test/badge.svg" alt="Test">
+			<p><img src="https://img.shields.io/npm/v/tractjs" alt="https://www.npmjs.com/package/tractjs">
+				<img src="https://github.com/bminixhofer/tractjs/workflows/Test/badge.svg" alt="Test">
 			<img src="https://github.com/bminixhofer/tractjs/workflows/Deploy%20to%20Github%20Pages/badge.svg" alt="Deploy to Github Pages"></p>
 			<p>Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of <a href="https://github.com/snipsco/tract">tract</a>.</p>
 			<p><a href="https://bminixhofer.github.io/tractjs/">Website</a> | <a href="https://bminixhofer.github.io/tractjs/docs/">API Docs</a></p>
@@ -2766,11 +2767,12 @@ img {
 				<li>tractjs is more convenient to use. It can build to a single file <code>tractjs.min.js</code> which contains the inlined WASM and WebWorker. The WASM backend of ONNX.js can not as easily be used without a build system.</li>
 			</ul>
 			<p>There are however also some downsides to tractjs. See the <a href="#faq">FAQ</a>.</p>
-			<a href="#status" id="status" style="color: inherit; text-decoration: none;">
-				<h2>Status</h2>
+			<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+				<h2>Getting started</h2>
 			</a>
-			<p>tractjs is not released yet. You can, however, use it today! The <code>master</code> branch builds to <code>https://bminixhofer.github.io/tractjs/dist/</code>.
-			Here is an example:</p>
+			<a href="#without-a-bundler" id="without-a-bundler" style="color: inherit; text-decoration: none;">
+				<h3>Without a bundler</h3>
+			</a>
 			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span> /&gt;</span>
@@ -2785,28 +2787,46 @@ img {
     </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-			<p>This is however <em>very</em> prone to breaking.</p>
-			<p>CommonJS and ES6 modules are built as well. See <a href="https://github.com/bminixhofer/tractjs/tree/gh-pages/dist">https://github.com/bminixhofer/tractjs/tree/gh-pages/dist</a>.</p>
-			<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
-				<h2>Roadmap</h2>
+			<a href="#with-a-bundler" id="with-a-bundler" style="color: inherit; text-decoration: none;">
+				<h3>With a bundler</h3>
 			</a>
-			<p>See <a href="https://github.com/snipsco/tract/issues/269">https://github.com/snipsco/tract/issues/269</a>.</p>
+			<pre><code>npm <span class="hljs-keyword">install</span> tractjs</code></pre><pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> tractjs <span class="hljs-keyword">from</span> <span class="hljs-string">"tractjs"</span>;
+
+<span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>);
+model
+  .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+  .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(preds);
+  });</code></pre>
 			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
 				<h2>FAQ</h2>
 			</a>
-			<p><strong>What about size?</strong></p>
-			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.</p>
-			<p>If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.</p>
-			<p><strong>What about WebGL / WebNN support?</strong></p>
-			<p>tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.</p>
-			<p><strong>What are input facts?</strong></p>
-			<p>For some (mainly tensorflow) models tract needs information about the shape of the input to run inference. In that case, you can pass information about the input datatype and shape as an <em>input fact</em> like this:</p>
+			<p><strong>My model with dynamic input dimensions doesn&#39;t work. Why?</strong></p>
+			<p>Currently, tract requires fully determined input dimensions to optimize a model. There are two options:</p>
+			<ol>
+				<li>Turn <code>optimize</code> off:</li>
+			</ol>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
+  <span class="hljs-attr">optimize</span>: <span class="hljs-literal">false</span>,
+});</code></pre>
+			<p>This will however <em>significantly</em> impact performance.</p>
+			<ol start="2">
+				<li>Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:</li>
+			</ol>
 			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
   <span class="hljs-attr">inputFacts</span>: {
     <span class="hljs-number">0</span>: [<span class="hljs-string">"float32"</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]],
   },
 });</code></pre>
-			<p>Also check out the <a href="https://bminixhofer.github.io/tractjs/docs/">API docs</a>.</p>
+			<p>Be aware that the model will only work properly with inputs of this exact shape though.</p>
+			<p>There is ongoing work in tract to allow dynamically sized inputs.</p>
+			<p><strong>What about size?</strong></p>
+			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.</p>
+			<p>If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.</p>
+			<p><strong>What about WebGL / WebNN support?</strong></p>
+			<p>tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.</p>
+			<p><strong>Why do I still get some output back when passing an input with invalid shape / rank?</strong></p>
+			<p>Currently tract does not do much error handling in regard to input dimensionality. So most of the time you will get some output back, it will just not be correct. There is ongoing work in tract to be more strict about input dimensionality.</p>
 			<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 				<h2>License</h2>
 			</a>
