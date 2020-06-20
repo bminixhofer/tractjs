@@ -1,6 +1,6 @@
 # tractjs
 
-![https://www.npmjs.com/package/tractjs](https://img.shields.io/npm/v/tractjs)
+[![npm version](https://img.shields.io/npm/v/tractjs)](https://www.npmjs.com/package/tractjs)
 ![Test](https://github.com/bminixhofer/tractjs/workflows/Test/badge.svg)
 ![Deploy to Github Pages](https://github.com/bminixhofer/tractjs/workflows/Deploy%20to%20Github%20Pages/badge.svg)
 
