@@ -96,10 +96,6 @@ If you are working on a very size-sensitive application, get in touch and we can
 
 tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.
 
-**Why do I still get some output back when passing an input with invalid shape / rank?**
-
-Currently tract does not do much error handling in regard to input dimensionality. So most of the time you will get some output back, it will just not be correct. There is ongoing work in tract to be more strict about input dimensionality.
-
 ## License
 
 ### Apache 2.0/MIT
