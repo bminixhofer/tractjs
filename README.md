@@ -6,6 +6,8 @@
 
 Run ONNX and TensorFlow inference in the browser. A thin wrapper on top of [tract](https://github.com/snipsco/tract).
 
+The [Open Neural Network Exchange](https://onnx.ai/) is a format which many popular libraries like PyTorch, TensorFlow and MXNet can export to which allows tractjs to run neural networks from (almost) any library.
+
 [Website](https://bminixhofer.github.io/tractjs/) | [API Docs](https://bminixhofer.github.io/tractjs/docs/)
 
 ## Why tractjs instead of ONNX.js?
