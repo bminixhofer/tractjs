@@ -59,11 +59,20 @@ export declare class Model {
 	/**
 	 * Runs the model on the given input.
 	 * The first call might be slower because it has to wait for model initialization to finish.
-	 * @param tensors - List of input tensors.
+	 * @param inputs - List of input tensors.
 	 *
 	 * @returns Promise for a list of output tensors.
 	 */
 	predict(inputs: Tensor[]): Promise<Tensor[]>;
+	/**
+	 * Runs the model on a single input tensor.
+	 * The first call might be slower because it has to wait for model initialization to finish.
+	 * This method is provided as convenience method for interfacing with Rust WASM, since arrays of custom objects are not supported yet.
+	 * @param input - a single input tensor.
+	 *
+	 * @returns The first output tensor.
+	 */
+	predict_one(input: Tensor): Promise<Tensor>;
 	/**
 	 * Removes all references to the internal model allowing it to be garbage collected.
 	 */
