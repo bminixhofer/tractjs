@@ -8,12 +8,15 @@ function call(type: string, body: unknown): Promise<unknown> {
   const uid = Math.random().toString(36);
   worker.postMessage({ type, body, uid });
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (e: any) => {
       if (e.data.uid === uid) {
         worker.removeEventListener("message", handler);
-        resolve(e.data.body);
+        if (e.data.type === 'error') {
+          return reject(e.data.body);
+        }
+        return resolve(e.data.body);
       }
     };
 
