@@ -108,5 +108,11 @@ ctx.addEventListener("message", (e) => {
       body,
       uid: data.uid,
     });
+  }).catch((err) => {
+    ctx.postMessage({
+      type: 'error',
+      body: err,
+      uid: data.uid,
+    });
   });
 });
