@@ -1,4 +1,4 @@
-const Worker = require("web-worker"); // import doesn't seem to work here
+import Worker from "web-worker";
 import { Tensor } from "./tensor";
 import { Format, Options, InternalOptions } from "./options";
 // @ts-ignore

@@ -2,6 +2,7 @@ const rollup = require("rollup");
 const typescript = require("rollup-plugin-typescript2");
 const resolve = require("@rollup/plugin-node-resolve").default;
 const replace = require("@rollup/plugin-replace");
+const commonjs = require("@rollup/plugin-commonjs");
 const wasm = require("@rollup/plugin-wasm");
 const url = require("@rollup/plugin-url");
 const { terser } = require("rollup-plugin-terser");
@@ -30,7 +31,10 @@ function getOptions(env) {
       replace({
         __utils__: "./utils/" + env, // replace imports using __utils__ with node / browser utils depending on env
       }),
-      resolve(),
+      resolve({
+        browser: env == "browser",
+      }),
+      commonjs(),
       typescript(),
       url({
         include: "./dist/worker.js",
@@ -42,6 +46,7 @@ function getOptions(env) {
         to: tractVersion,
       }),
     ],
+    external: env == "browser" ? [] : ["web-worker"],
   };
 }
 
