@@ -36,6 +36,11 @@ function getOptions(env) {
         include: "./dist/worker.js",
         limit: Infinity, // always inline the worker
       }),
+      fileReplacePlugin({
+        files: "dist/*",
+        from: /__tractVersion__/g,
+        to: tractVersion,
+      }),
     ],
   };
 }
