@@ -58,6 +58,21 @@ model
   });
 ```
 
+### With Node.js
+
+tractjs now runs in Node.js! Models are fetched from the file system.
+
+```js
+const tractjs = require("tractjs");
+
+const model = new tractjs.Model("./path/to/your/model");
+model
+  .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
+  .then((preds) => {
+    console.log(preds);
+  });
+```
+
 ## FAQ
 
 **My model with dynamic input dimensions doesn't work. Why?**
