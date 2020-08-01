@@ -2799,6 +2799,18 @@ model
   .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
     <span class="hljs-built_in">console</span>.log(preds);
   });</code></pre>
+			<a href="#with-nodejs" id="with-nodejs" style="color: inherit; text-decoration: none;">
+				<h3>With Node.js</h3>
+			</a>
+			<p>tractjs now runs in Node.js! Models are fetched from the file system.</p>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> tractjs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"tractjs"</span>);
+
+<span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"./path/to/your/model"</span>);
+model
+  .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+  .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(preds);
+  });</code></pre>
 			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
 				<h2>FAQ</h2>
 			</a>
