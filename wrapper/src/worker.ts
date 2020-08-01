@@ -102,17 +102,19 @@ ctx.addEventListener("message", (e) => {
       throw new Error(`could not find type ${data.type}`);
   }
 
-  (promise as Promise<unknown>).then((body) => {
-    ctx.postMessage({
-      type: data.type,
-      body,
-      uid: data.uid,
+  (promise as Promise<unknown>)
+    .then((body) => {
+      ctx.postMessage({
+        type: data.type,
+        body,
+        uid: data.uid,
+      });
+    })
+    .catch((err) => {
+      ctx.postMessage({
+        type: "error",
+        body: err,
+        uid: data.uid,
+      });
     });
-  }).catch((err) => {
-    ctx.postMessage({
-      type: 'error',
-      body: err,
-      uid: data.uid,
-    });
-  });
 });

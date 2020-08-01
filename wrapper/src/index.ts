@@ -1,8 +1,11 @@
-import TractWorker from "web-worker:./worker.ts";
+import Worker from "web-worker";
 import { Tensor } from "./tensor";
 import { Format, Options, InternalOptions } from "./options";
+// @ts-ignore
+import * as utils from "__utils__";
+import worker_data from "../dist/worker.js";
 
-const worker: Worker = new TractWorker();
+const worker = new Worker(worker_data);
 
 function call(type: string, body: unknown): Promise<unknown> {
   const uid = Math.random().toString(36);
@@ -13,7 +16,7 @@ function call(type: string, body: unknown): Promise<unknown> {
     const handler = (e: any) => {
       if (e.data.uid === uid) {
         worker.removeEventListener("message", handler);
-        if (e.data.type === 'error') {
+        if (e.data.type === "error") {
           return reject(e.data.body);
         }
         return resolve(e.data.body);
@@ -22,14 +25,6 @@ function call(type: string, body: unknown): Promise<unknown> {
 
     worker.addEventListener("message", handler);
   });
-}
-
-async function load(url: string) {
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const data = new Uint8Array(buffer);
-
-  return data;
 }
 
 /**
@@ -79,9 +74,11 @@ class Model {
       inputFacts: options.inputFacts !== undefined ? options.inputFacts : {},
     };
 
-    this.modelId = load(url).then((data) =>
-      call("load", { data, options: internalOptions })
-    ) as Promise<number>;
+    this.modelId = utils
+      .load(url)
+      .then((data: Uint8Array) =>
+        call("load", { data, options: internalOptions })
+      ) as Promise<number>;
   }
 
   /**
