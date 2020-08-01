@@ -87,7 +87,7 @@ const model = new tractjs.Model("path/to/your/model", {
 });
 ```
 
-This will however *significantly* impact performance.
+This will however _significantly_ impact performance.
 
 2. Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:
 
@@ -125,6 +125,4 @@ All original work licensed under either of
 
 ### Contribution
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you, as defined in the Apache-2.0 license, shall
-be dual licensed as above, without any additional terms or conditions.
+Contributions are very welcome! See [CONTRIBUTING.md](/CONTRIBUTING.md).
