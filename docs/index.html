@@ -2828,6 +2828,8 @@ model
 			</ol>
 			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
   <span class="hljs-attr">inputFacts</span>: {
+    <span class="hljs-comment">// be careful with image model input facts! here I use ONNX's NCHW format</span>
+    <span class="hljs-comment">// if you are using TF you will probably need to use NHWC (`[1, 224, 224, 3]`).</span>
     <span class="hljs-number">0</span>: [<span class="hljs-string">"float32"</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]],
   },
 });</code></pre>
