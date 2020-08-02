@@ -94,6 +94,8 @@ This will however _significantly_ impact performance.
 ```js
 const model = new tractjs.Model("path/to/your/model", {
   inputFacts: {
+    // be careful with image model input facts! here I use ONNX's NCHW format
+    // if you are using TF you will probably need to use NHWC (`[1, 224, 224, 3]`).
     0: ["float32", [1, 3, 224, 224]],
   },
 });
