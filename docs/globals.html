@@ -2814,7 +2814,9 @@ model
 			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
 				<h2>FAQ</h2>
 			</a>
-			<p><strong>My model with dynamic input dimensions doesn&#39;t work. Why?</strong></p>
+			<a href="#my-model-with-dynamic-input-dimensions-doesn39t-work-why" id="my-model-with-dynamic-input-dimensions-doesn39t-work-why" style="color: inherit; text-decoration: none;">
+				<h3>My model with dynamic input dimensions doesn&#39;t work. Why?</h3>
+			</a>
 			<p>Currently, tract requires fully determined input dimensions to optimize a model. There are two options:</p>
 			<ol>
 				<li>Turn <code>optimize</code> off:</li>
@@ -2835,10 +2837,14 @@ model
 });</code></pre>
 			<p>Be aware that the model will only work properly with inputs of this exact shape though.</p>
 			<p>There is ongoing work in tract to allow dynamically sized inputs.</p>
-			<p><strong>What about size?</strong></p>
+			<a href="#what-about-size" id="what-about-size" style="color: inherit; text-decoration: none;">
+				<h3>What about size?</h3>
+			</a>
 			<p>At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it&#39;s not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.</p>
 			<p>If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.</p>
-			<p><strong>What about WebGL / WebNN support?</strong></p>
+			<a href="#what-about-webgl--webnn-support" id="what-about-webgl--webnn-support" style="color: inherit; text-decoration: none;">
+				<h3>What about WebGL / WebNN support?</h3>
+			</a>
 			<p>tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.</p>
 			<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 				<h2>License</h2>
