@@ -75,7 +75,7 @@ model
 
 ## FAQ
 
-**My model with dynamic input dimensions doesn't work. Why?**
+### My model with dynamic input dimensions doesn't work. Why?
 
 Currently, tract requires fully determined input dimensions to optimize a model. There are two options:
 
@@ -105,13 +105,13 @@ Be aware that the model will only work properly with inputs of this exact shape 
 
 There is ongoing work in tract to allow dynamically sized inputs.
 
-**What about size?**
+### What about size?
 
 At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it's not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.
 
 If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.
 
-**What about WebGL / WebNN support?**
+### What about WebGL / WebNN support?
 
 tractjs are bindings to the tract Rust library which was originally not intended to be run on the web. WebGL / WebNN support would be great, but would require lots of web-specific changes in tract so it is currently not under consideration.
 
