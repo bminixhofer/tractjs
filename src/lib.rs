@@ -1,10 +1,11 @@
 use js_sys::{Array, Error, Object, Uint32Array};
 use std::io::Cursor;
 use tract_hir::prelude::*;
-use tract_onnx::prelude::*;
-use tract_tensorflow::prelude::*;
+// use tract_onnx::prelude::*;
+// use tract_tensorflow::prelude::*;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use std::convert::TryInto;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
@@ -31,7 +32,7 @@ impl<T: std::fmt::Debug> TractResultExt<T> for TractResult<T> {
     }
 }
 
-fn fact_from_js(input: JsValue) -> InferenceFact {
+fn fact_from_js(input: JsValue) -> TypedFact {
     let input: Array = input.dyn_into().expect("fact must be an Array.");
     let dtype = if let Some(string) = input.get(0).as_string() {
         Some(match string.as_str() {
@@ -60,10 +61,11 @@ fn fact_from_js(input: JsValue) -> InferenceFact {
     };
 
     match (dtype, shape) {
-        (Some(dtype), Some(shape)) => InferenceFact::dt_shape(dtype, shape),
-        (Some(dtype), None) => InferenceFact::dt(dtype),
-        (None, Some(shape)) => InferenceFact::shape(shape),
-        (None, None) => panic!("either dtype or shape must be specified."),
+        (Some(dtype), Some(shape)) => {
+            let shape: ShapeFact = (&shape[..]).try_into().unwrap();
+            TypedFact::dt_shape(dtype, shape).unwrap()
+        },
+        _ => panic!("either dtype or shape must be specified."),
     }
 }
 
@@ -232,12 +234,8 @@ impl CoreModel {
 
         let mut reader = Cursor::new(data);
 
-        let mut model = if use_onnx {
-            onnx().model_for_read(&mut reader)
-        } else {
-            tensorflow().model_for_read(&mut reader)
-        }
-        .map_js_error()?;
+        let mut model = tract_nnef::nnef().model_for_read(&mut reader)
+            .map_js_error()?;
 
         for (index, fact) in Object::keys(&input_facts)
             .iter()
