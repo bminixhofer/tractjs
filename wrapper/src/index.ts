@@ -82,6 +82,15 @@ class Model {
   }
 
   /**
+   * Check if the model has been loaded.
+   * @returns A promise which resolves once the model is successfully initialized.
+   * It rejects if there was an error during initialization.
+   */
+  async loaded(): Promise<void> {
+    await this.modelId;
+  }
+
+  /**
    * Runs the model on the given input.
    * The first call might be slower because it has to wait for model initialization to finish.
    * @param inputs - List of input tensors.
