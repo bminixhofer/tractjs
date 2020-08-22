@@ -8,21 +8,15 @@ import { Options } from "./options";
  */
 declare class Model {
     private modelId;
+    private constructor();
     /**
      * Loads a model.
      * @param url - The URL to load the model from. Will be passed to `fetch`.
      * @param options - Additional options. See {@link Options} for details.
      */
-    constructor(url: string, options?: Options);
-    /**
-     * Check if the model has been loaded.
-     * @returns A promise which resolves once the model is successfully initialized.
-     * It rejects if there was an error during initialization.
-     */
-    loaded(): Promise<void>;
+    static load(url: string, options?: Options): Promise<Model>;
     /**
      * Runs the model on the given input.
-     * The first call might be slower because it has to wait for model initialization to finish.
      * @param inputs - List of input tensors.
      *
      * @returns Promise for a list of output tensors.
@@ -30,7 +24,6 @@ declare class Model {
     predict(inputs: Tensor[]): Promise<Tensor[]>;
     /**
      * Runs the model on a single input tensor.
-     * The first call might be slower because it has to wait for model initialization to finish.
      * This method is provided as convenience method for interfacing with Rust WASM, since arrays of custom objects are not supported yet.
      * @param input - a single input tensor.
      *
@@ -42,4 +35,10 @@ declare class Model {
      */
     destroy(): Promise<void>;
 }
-export { Model, Tensor };
+/**
+ * Loads a model. Alias for `Model.load`.
+ * @param url - The URL to load the model from. Will be passed to `fetch`.
+ * @param options - Additional options. See {@link Options} for details.
+ */
+declare const load: typeof Model.load;
+export { Model, Tensor, load };

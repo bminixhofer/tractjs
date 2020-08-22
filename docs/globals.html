@@ -2744,6 +2744,9 @@ img {
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a>
 		</li>
+		<li class=" tsd-kind-variable">
+			<a href="globals.html#load" class="tsd-kind-icon">load</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
@@ -2779,12 +2782,13 @@ img {
     <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span> /&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/tractjs/dist/tractjs.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-      <span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>);
-      model
-        .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
-        .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
-          <span class="hljs-built_in">console</span>.log(preds);
-        });
+      tractjs.load(<span class="hljs-string">"path/to/your/model"</span>).then(<span class="hljs-function">(<span class="hljs-params">model</span>) =&gt;</span> {
+        model
+          .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+          .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(preds);
+          });
+      });
     </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
@@ -2793,24 +2797,26 @@ img {
 			</a>
 			<pre><code>npm <span class="hljs-keyword">install</span> tractjs</code></pre><pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> tractjs <span class="hljs-keyword">from</span> <span class="hljs-string">"tractjs"</span>;
 
-<span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>);
-model
-  .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
-  .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(preds);
-  });</code></pre>
+tractjs.load(<span class="hljs-string">"path/to/your/model"</span>).then(<span class="hljs-function">(<span class="hljs-params">model</span>) =&gt;</span> {
+  model
+    .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+    .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(preds);
+    });
+});</code></pre>
 			<a href="#with-nodejs" id="with-nodejs" style="color: inherit; text-decoration: none;">
 				<h3>With Node.js</h3>
 			</a>
 			<p>tractjs now runs in Node.js! Models are fetched from the file system.</p>
 			<pre><code class="language-js"><span class="hljs-keyword">const</span> tractjs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"tractjs"</span>);
 
-<span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"./path/to/your/model"</span>);
-model
-  .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
-  .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(preds);
-  });</code></pre>
+tractjs.load(<span class="hljs-string">"./path/to/your/model"</span>).then(<span class="hljs-function">(<span class="hljs-params">model</span>) =&gt;</span> {
+  model
+    .predict([<span class="hljs-keyword">new</span> tractjs.Tensor(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Float32Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]), [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>])])
+    .then(<span class="hljs-function">(<span class="hljs-params">preds</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(preds);
+    });
+});</code></pre>
 			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
 				<h2>FAQ</h2>
 			</a>
@@ -2821,14 +2827,14 @@ model
 			<ol>
 				<li>Turn <code>optimize</code> off:</li>
 			</ol>
-			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">await</span> tractjs.load(<span class="hljs-string">"path/to/your/model"</span>, {
   <span class="hljs-attr">optimize</span>: <span class="hljs-literal">false</span>,
 });</code></pre>
 			<p>This will however <em>significantly</em> impact performance.</p>
 			<ol start="2">
 				<li>Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:</li>
 			</ol>
-			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">new</span> tractjs.Model(<span class="hljs-string">"path/to/your/model"</span>, {
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> model = <span class="hljs-keyword">await</span> tractjs.load(<span class="hljs-string">"path/to/your/model"</span>, {
   <span class="hljs-attr">inputFacts</span>: {
     <span class="hljs-comment">// be careful with image model input facts! here I use ONNX's NCHW format</span>
     <span class="hljs-comment">// if you are using TF you will probably need to use NHWC (`[1, 224, 224, 3]`).</span>
@@ -2883,6 +2889,12 @@ model
 							<li class="tsd-kind-type-alias"><a href="globals.html#options" class="tsd-kind-icon">Options</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#shape" class="tsd-kind-icon">Shape</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Variables</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-variable"><a href="globals.html#load" class="tsd-kind-icon">load</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2983,6 +2995,29 @@ model
 				</aside>
 			</section>
 		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Variables</h2>
+			<section class="tsd-panel tsd-member tsd-kind-variable">
+				<a name="load" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> load</h3>
+				<div class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="classes/model.html#load" class="tsd-signature-type">load</a></div>
+				<aside class="tsd-sources">
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Loads a model. Alias for <code>Model.load</code>.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>param</dt>
+						<dd><p>The URL to load the model from. Will be passed to <code>fetch</code>.</p>
+						</dd>
+						<dt>param</dt>
+						<dd><p>Additional options. See <a href="globals.html#options">Options</a> for details.</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+		</section>
 		<footer class="with-border-bottom">
 			<div class="container">
 				<h2>Legend</h2>
@@ -2991,6 +3026,9 @@ model
 						<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 						<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 					</ul>
 				</div>
 			</div>
