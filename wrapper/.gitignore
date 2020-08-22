@@ -3,3 +3,5 @@ docs
 core
 node_modules
 README.md
+coverage
+.DS_Store
