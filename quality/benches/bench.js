@@ -5,11 +5,11 @@ import { saveAs } from "file-saver";
 
 class TractjsModel {
   constructor(url, options) {
-    this.model = new tractjs.Model(url, options);
+    this.model = tractjs.load(url, options);
   }
 
   async run(data, shape) {
-    return await this.model.predict([new tractjs.Tensor(data, shape)]);
+    return await (await this.model).predict([new tractjs.Tensor(data, shape)]);
   }
 }
 

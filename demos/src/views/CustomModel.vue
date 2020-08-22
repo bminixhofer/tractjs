@@ -8,11 +8,7 @@
             <h2>Format</h2>
           </v-col>
           <v-col>
-            <v-select
-              v-model="format"
-              :items="formats"
-              class="small-input"
-            ></v-select>
+            <v-select v-model="format" :items="formats" class="small-input"></v-select>
           </v-col>
         </v-row>
         <v-row>
@@ -58,11 +54,7 @@
             <h2>Data type</h2>
           </v-col>
           <v-col>
-            <v-select
-              v-model="dataType"
-              :items="Object.keys(dataTypes)"
-              class="small-input"
-            ></v-select>
+            <v-select v-model="dataType" :items="Object.keys(dataTypes)" class="small-input"></v-select>
           </v-col>
         </v-row>
         <v-row>
@@ -85,8 +77,7 @@
       color="primary"
       class="align-self-center"
       x-large
-      >Predict</v-btn
-    >
+    >Predict</v-btn>
     <v-container class="output" v-if="output">
       <v-row>
         <v-col class="body-1 font-weight-bold ma-0">Inference time:</v-col>
@@ -94,9 +85,11 @@
       </v-row>
       <v-row>
         <v-col class="body-1 font-weight-bold ma-0">Output shape:</v-col>
-        <v-col class="text-right">{{
+        <v-col class="text-right">
+          {{
           "(" + output.shape.join(", ") + ")"
-        }}</v-col>
+          }}
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -148,7 +141,7 @@ export default {
     async file() {
       const url = URL.createObjectURL(this.file);
 
-      this.model = await new tractjs.Model(url, {
+      this.model = await tractjs.load(url, {
         format: this.format,
       });
     },

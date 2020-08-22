@@ -30,12 +30,13 @@ There are however also some downsides to tractjs. See the [FAQ](#faq).
     <meta charset="utf-8" />
     <script src="https://unpkg.com/tractjs/dist/tractjs.min.js"></script>
     <script>
-      const model = new tractjs.Model("path/to/your/model");
-      model
-        .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
-        .then((preds) => {
-          console.log(preds);
-        });
+      tractjs.load("path/to/your/model").then((model) => {
+        model
+          .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
+          .then((preds) => {
+            console.log(preds);
+          });
+      });
     </script>
   </head>
 </html>
@@ -50,12 +51,13 @@ npm install tractjs
 ```js
 import * as tractjs from "tractjs";
 
-const model = new tractjs.Model("path/to/your/model");
-model
-  .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
-  .then((preds) => {
-    console.log(preds);
-  });
+tractjs.load("path/to/your/model").then((model) => {
+  model
+    .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
+    .then((preds) => {
+      console.log(preds);
+    });
+});
 ```
 
 ### With Node.js
@@ -65,12 +67,13 @@ tractjs now runs in Node.js! Models are fetched from the file system.
 ```js
 const tractjs = require("tractjs");
 
-const model = new tractjs.Model("./path/to/your/model");
-model
-  .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
-  .then((preds) => {
-    console.log(preds);
-  });
+tractjs.load("./path/to/your/model").then((model) => {
+  model
+    .predict([new tractjs.Tensor(new Float32Array([1, 2, 3, 4]), [2, 2])])
+    .then((preds) => {
+      console.log(preds);
+    });
+});
 ```
 
 ## FAQ
@@ -82,7 +85,7 @@ Currently, tract requires fully determined input dimensions to optimize a model.
 1. Turn `optimize` off:
 
 ```js
-const model = new tractjs.Model("path/to/your/model", {
+const model = await tractjs.load("path/to/your/model", {
   optimize: false,
 });
 ```
@@ -92,7 +95,7 @@ This will however _significantly_ impact performance.
 2. Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:
 
 ```js
-const model = new tractjs.Model("path/to/your/model", {
+const model = await tractjs.load("path/to/your/model", {
   inputFacts: {
     // be careful with image model input facts! here I use ONNX's NCHW format
     // if you are using TF you will probably need to use NHWC (`[1, 224, 224, 3]`).

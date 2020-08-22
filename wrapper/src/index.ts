@@ -34,13 +34,22 @@ function call(type: string, body: unknown): Promise<unknown> {
  * The model is stored in a WebWorker which this class internally accesses via an ID.
  */
 class Model {
-  private modelId: Promise<number>;
+  private modelId: number;
+  private constructor(modelId: number) {
+    if (!Number.isInteger(modelId)) {
+      throw new Error(
+        "Models can not be constructed directly! Please use `tractjs.load` instead."
+      );
+    }
+    this.modelId = modelId;
+  }
+
   /**
    * Loads a model.
    * @param url - The URL to load the model from. Will be passed to `fetch`.
    * @param options - Additional options. See {@link Options} for details.
    */
-  constructor(url: string, options?: Options) {
+  static async load(url: string, options?: Options): Promise<Model> {
     options = options || {};
 
     // try to infer the format based on file extension
@@ -74,25 +83,16 @@ class Model {
       inputFacts: options.inputFacts !== undefined ? options.inputFacts : {},
     };
 
-    this.modelId = utils
-      .load(url)
-      .then((data: Uint8Array) =>
-        call("load", { data, options: internalOptions })
-      ) as Promise<number>;
-  }
+    const data = await utils.load(url);
+    const id = call("load", { data, options: internalOptions }) as Promise<
+      number
+    >;
 
-  /**
-   * Check if the model has been loaded.
-   * @returns A promise which resolves once the model is successfully initialized.
-   * It rejects if there was an error during initialization.
-   */
-  async loaded(): Promise<void> {
-    await this.modelId;
+    return new Model(await id);
   }
 
   /**
    * Runs the model on the given input.
-   * The first call might be slower because it has to wait for model initialization to finish.
    * @param inputs - List of input tensors.
    *
    * @returns Promise for a list of output tensors.
@@ -106,7 +106,6 @@ class Model {
 
   /**
    * Runs the model on a single input tensor.
-   * The first call might be slower because it has to wait for model initialization to finish.
    * This method is provided as convenience method for interfacing with Rust WASM, since arrays of custom objects are not supported yet.
    * @param input - a single input tensor.
    *
@@ -128,4 +127,11 @@ class Model {
   }
 }
 
-export { Model, Tensor };
+/**
+ * Loads a model. Alias for `Model.load`.
+ * @param url - The URL to load the model from. Will be passed to `fetch`.
+ * @param options - Additional options. See {@link Options} for details.
+ */
+const load = Model.load;
+
+export { Model, Tensor, load };
