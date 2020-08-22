@@ -110,10 +110,10 @@ function getData(canvas) {
 }
 
 function softmax(logits) {
-  const exp = logits.map(x => Math.exp(x));
+  const exp = logits.map((x) => Math.exp(x));
   const sum = exp.reduce((a, b) => a + b, 0);
 
-  return exp.map(x => x / sum);
+  return exp.map((x) => x / sum);
 }
 
 function getTopK(preds, k) {
@@ -132,32 +132,32 @@ export default {
     items: [
       {
         text: "Cat",
-        value: rURL("cat.png")
+        value: rURL("cat.png"),
       },
       {
         text: "Dog",
-        value: rURL("dog.png")
+        value: rURL("dog.png"),
       },
       {
         text: "Cheetah",
-        value: rURL("cheetah.png")
+        value: rURL("cheetah.png"),
       },
       {
         text: "Bird",
-        value: rURL("bird.png")
-      }
+        value: rURL("bird.png"),
+      },
     ],
     output: null,
     model: null,
-    labels: []
+    labels: [],
   }),
   computed: {
     canRun() {
       return this.model !== null && this.labels.length > 0;
-    }
+    },
   },
   async created() {
-    this.model = await new tractjs.Model(rURL("squeezenet1_1.onnx"));
+    this.model = await tractjs.load(rURL("squeezenet1_1.onnx"));
 
     const response = await fetch(rURL("synset.txt"));
     if (response.status < 200 && response.status >= 300) {
@@ -165,16 +165,12 @@ export default {
     }
     const text = await response.text();
 
-    text.split("\n").forEach(line => {
+    text.split("\n").forEach((line) => {
       if (line.trim().length == 0) {
         return;
       }
 
-      let label = line
-        .split(" ")
-        .slice(1)
-        .join(" ")
-        .split(",")[0];
+      let label = line.split(" ").slice(1).join(" ").split(",")[0];
       this.labels.push(label);
     });
   },
@@ -210,11 +206,11 @@ export default {
         time: endTime - startTime,
         predictions: topK.map(([score, index]) => ({
           label: this.labels[index],
-          score
-        }))
+          score,
+        })),
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
