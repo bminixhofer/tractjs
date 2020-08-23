@@ -54,6 +54,12 @@ async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
   await initialize;
   const model = store.get(modelId);
 
+  if (model === undefined) {
+    throw new Error(
+      `Model with ID ${modelId} not found in storage. Maybe you destroyed it?`
+    );
+  }
+
   const inputs = new CoreTensorVec();
   tensors.forEach((tensor) => {
     const coreTensor = new CoreTensor(
@@ -96,7 +102,7 @@ ctx.addEventListener("message", (e) => {
       promise = predict(data.body.modelId, data.body.tensors);
       break;
     case "destroy":
-      promise = destroy(data.body);
+      promise = destroy(data.body.modelId);
       break;
     default:
       throw new Error(`could not find type ${data.type}`);
