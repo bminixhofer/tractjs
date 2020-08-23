@@ -41,4 +41,8 @@ declare class Model {
  * @param options - Additional options. See {@link Options} for details.
  */
 declare const load: typeof Model.load;
-export { Model, Tensor, load };
+/**
+ * Utility function for terminating the worker from outside of the module.
+ */
+declare function terminate(): void;
+export { Model, Tensor, load, terminate };

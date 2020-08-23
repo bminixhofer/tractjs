@@ -83,5 +83,9 @@ export declare class Model {
  * @param options - Additional options. See {@link Options} for details.
  */
 export declare const load: typeof Model.load;
+/**
+ * Utility function for terminating the worker from outside of the module.
+ */
+export declare function terminate(): void;
 
 export {};
