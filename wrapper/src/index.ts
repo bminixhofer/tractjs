@@ -134,4 +134,11 @@ class Model {
  */
 const load = Model.load;
 
-export { Model, Tensor, load };
+/**
+ * Utility function for terminating the worker from outside of the module.
+ */
+function terminate(): void {
+  worker.terminate();
+}
+
+export { Model, Tensor, load, terminate };
