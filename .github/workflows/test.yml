@@ -35,6 +35,8 @@ jobs:
         run: ./download_models.sh
         working-directory: quality/models
       - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
       - name: Build module
         run: npm run build
         working-directory: ${{env.working-directory}}
