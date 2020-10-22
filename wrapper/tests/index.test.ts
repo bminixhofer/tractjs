@@ -55,4 +55,32 @@ describe('model', () => {
     const input = new Tensor(new Float32Array([1, 2, 3]), [1, 3]);
     await expect(model.predict([input])).rejects.toThrow();
   });
+  test('can predict with dynamic dimension', async () => {
+    const model: Model = await load('./tests/plus3.pb', {
+      inputFacts: {
+        0: ['float32', [1, 's']],
+      },
+    });
+    const input = new Tensor(new Float32Array([1, 2, 3, 4]), [1, 4]);
+    const predictions = await model.predict([input], {
+      's': 4
+    });
+    expect(Array.from(predictions[0].data)).toEqual([4, 5, 6, 7])
+  });
+  test('can predict with dynamic dimension (and dimension arithmetic)', async () => {
+    const model: Model = await load('./tests/model.onnx', {
+      inputFacts: {
+        0: ['uint8', [1, {
+          id: 's',
+          slope: 2,
+          intercept: 0
+        }]],
+      },
+    });
+    const input = new Tensor(new Uint8Array([1, 2, 3, 4]), [1, 4]);
+    const predictions = await model.predict([input], {
+      's': 2
+    });
+    expect(predictions[0].shape).toEqual([1, 4, 2])
+  });
 });
