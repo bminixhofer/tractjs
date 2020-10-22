@@ -1,14 +1,14 @@
 import type { DataType } from "tractjs-core";
 
 type SymbolValues = { [id: string]: number };
-type Symbol = string | {
+type DimSymbol = string | {
   id: string,
   slope: number,
   intercept: number,
 };
 
 type Format = "onnx" | "tensorflow";
-type Shape = Array<number | Symbol>;
+type Shape = Array<number | DimSymbol>;
 
 type Fact = [DataType, Shape];
 
