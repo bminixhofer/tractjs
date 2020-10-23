@@ -125,8 +125,7 @@ fn custom_input_tf<P1: AsRef<Path>, P2: AsRef<Path>>(
     input_file: P1,
     output_file: P2,
 ) -> TractResult<()> {
-    let mut cursor =
-        Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.pb") as &[u8]);
+    let mut cursor = Cursor::new(include_bytes!("../models/data/squeezenet_1_1/model.pb") as &[u8]);
     let model = tract_tensorflow::tensorflow()
         .model_for_read(&mut cursor)?
         .with_input_fact(
@@ -137,7 +136,10 @@ fn custom_input_tf<P1: AsRef<Path>, P2: AsRef<Path>>(
         .into_optimized()?
         .into_runnable()?;
 
-    let inputs = tvec![random_from_shape((1, 27, 27, 128)), random_from_shape((1, 27, 27, 128))];
+    let inputs = tvec![
+        random_from_shape((1, 27, 27, 128)),
+        random_from_shape((1, 27, 27, 128))
+    ];
     serialize_tensors(&inputs, input_file);
 
     let preds = model.run(inputs)?;

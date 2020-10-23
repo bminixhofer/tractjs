@@ -1,5 +1,5 @@
 import { Tensor } from "./tensor";
-import type { InternalOptions } from "./options";
+import type { InternalOptions, SymbolValues } from "./options";
 import { CoreModel, CoreTensorVec, CoreTensor } from "tractjs-core";
 import init from "tractjs-core";
 import wasm from "../core/tractjs_core_bg.wasm";
@@ -50,7 +50,7 @@ async function load(
   return store.add(model);
 }
 
-async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
+async function predict(modelId: number, tensors: Tensor[], symbolValues: SymbolValues): Promise<Tensor[]> {
   await initialize;
   const model = store.get(modelId);
 
@@ -70,7 +70,7 @@ async function predict(modelId: number, tensors: Tensor[]): Promise<Tensor[]> {
     inputs.push(coreTensor);
   });
 
-  const outputs = model.predict(inputs);
+  const outputs = model.predict(inputs, symbolValues);
   const outputTensors = [];
 
   for (let i = 0; i < outputs.length; i++) {
@@ -99,7 +99,7 @@ ctx.addEventListener("message", (e) => {
       promise = load(data.body.data, data.body.options);
       break;
     case "predict":
-      promise = predict(data.body.modelId, data.body.tensors);
+      promise = predict(data.body.modelId, data.body.tensors, data.body.symbolValues);
       break;
     case "destroy":
       promise = destroy(data.body.modelId);

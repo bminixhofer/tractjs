@@ -1,6 +1,6 @@
 import Worker from "web-worker";
 import { Tensor } from "./tensor";
-import { Format, Options, InternalOptions } from "./options";
+import { Format, Options, InternalOptions, SymbolValues } from "./options";
 // @ts-ignore
 import * as utils from "__utils__";
 import worker_data from "../dist/worker.js";
@@ -94,13 +94,15 @@ class Model {
   /**
    * Runs the model on the given input.
    * @param inputs - List of input tensors.
+   * @param symbolValues - (optional) values for symbolic dimensions.
    *
    * @returns Promise for a list of output tensors.
    */
-  async predict(inputs: Tensor[]): Promise<Tensor[]> {
+  async predict(inputs: Tensor[], symbolValues: SymbolValues = {}): Promise<Tensor[]> {
     return await (call("predict", {
       modelId: await this.modelId,
       tensors: inputs,
+      symbolValues,
     }) as Promise<Tensor[]>);
   }
 
@@ -108,13 +110,15 @@ class Model {
    * Runs the model on a single input tensor.
    * This method is provided as convenience method for interfacing with Rust WASM, since arrays of custom objects are not supported yet.
    * @param input - a single input tensor.
+   * @param symbolValues - (optional) values for symbolic dimensions.
    *
    * @returns The first output tensor.
    */
-  async predict_one(input: Tensor): Promise<Tensor> {
+  async predict_one(input: Tensor, symbolValues: SymbolValues = {}): Promise<Tensor> {
     const tensors = await (call("predict", {
       modelId: await this.modelId,
       tensors: [input],
+      symbolValues,
     }) as Promise<Tensor[]>);
     return tensors[0];
   }
