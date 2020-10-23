@@ -80,19 +80,29 @@ tractjs.load("./path/to/your/model").then((model) => {
 
 ### My model with dynamic input dimensions doesn't work. Why?
 
-Currently, tract requires fully determined input dimensions to optimize a model. There are two options:
+Currently, tract requires has some restrictions on dynamic dimensions. If your model has a dynamic dimension, there's multiple solutions:
 
-1. Turn `optimize` off:
+1. Declare a dynamic dimension via an input fact. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:
 
 ```js
 const model = await tractjs.load("path/to/your/model", {
-  optimize: false,
+  inputFacts: {
+    0: ["float32", [1, "s", 224, 224]],
+  },
 });
 ```
 
-This will however _significantly_ impact performance.
+This dimension must then be made concrete on prediction:
 
-2. Set fixed input dimensions via input facts. Input facts are a way to provide additional information about input type and shape that can not be inferred via the model data:
+```js
+model.predict(input, {
+  "s": 3 // or some other value
+})
+```
+
+The API supports multiple dynamic dimensions, but currently it will probably only work with one.
+
+2. Set fixed input dimensions via input facts. This is of course not ideal because subsequently the model can only be passed inputs with this exact shape:
 
 ```js
 const model = await tractjs.load("path/to/your/model", {
@@ -104,13 +114,17 @@ const model = await tractjs.load("path/to/your/model", {
 });
 ```
 
-Be aware that the model will only work properly with inputs of this exact shape though.
+3. Turn `optimize` off. This is the nuclear option. It will turn off all optimizations relying on information about input shape. This will make sure your model work (even with multiple dynamic dimensions) but _significantly_ impact performance:
 
-There is ongoing work in tract to allow dynamically sized inputs.
+```js
+const model = await tractjs.load("path/to/your/model", {
+  optimize: false,
+});
+```
 
 ### What about size?
 
-At the time of writing, tractjs is very large for web standards (8.5MB raw, 2.5MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it's not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.
+At the time of writing, tractjs is very large for web standards (6.2MB raw, 2.1MB gzipped). This is due to tract being quite large, and due to some overhead from inlining the WASM. But it's not as bad as it sounds. You can load tractjs lazily along your demo, where you will likely have to load significantly large weights too.
 
 If you are working on a very size-sensitive application, get in touch and we can work on decreasing the size. There are some more optimizations to be done (e. g. an option not to inline WASM, and removing panics from the build). There is also ongoing work in tract to decrease size.
 
