@@ -96,7 +96,7 @@ describe('model', () => {
 
     expect(await model.get_metadata()).toEqual({
       "split_sequence": `{
-    "instructionss": [
+    "instructions": [
         [
             "Sentence",
             {
