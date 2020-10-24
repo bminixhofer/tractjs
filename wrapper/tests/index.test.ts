@@ -83,4 +83,49 @@ describe('model', () => {
     });
     expect(predictions[0].shape).toEqual([1, 4, 2])
   });
+  test('can access model metadata', async () => {
+    const model: Model = await load('./tests/model.onnx', {
+      inputFacts: {
+        0: ['uint8', [1, {
+          id: 's',
+          slope: 2,
+          intercept: 0
+        }]],
+      },
+    });
+
+    expect(await model.get_metadata()).toEqual({
+      "split_sequence": `{
+    "instructionss": [
+        [
+            "Sentence",
+            {
+                "PredictionIndex": 0
+            }
+        ],
+        [
+            "Token",
+            {
+                "PredictionIndex": 1
+            }
+        ],
+        [
+            "_Whitespace",
+            {
+                "Function": "whitespace"
+            }
+        ]
+    ]
+}`
+    })
+  });
+  test('returns empty metadata for TF models', async () => {
+    const model: Model = await load('./tests/plus3.pb', {
+      inputFacts: {
+        0: ['float32', [1, 's']],
+      },
+    });
+
+    expect(await model.get_metadata()).toEqual({})
+  });
 });

@@ -23,7 +23,15 @@ class ModelStorage {
   }
 
   get(id: number): CoreModel {
-    return this.store[id];
+    let model = this.store[id];
+
+    if (model === undefined) {
+      throw new Error(
+        `Model with ID ${id} not found in storage. Maybe you destroyed it?`
+      );
+    }
+
+    return model;
   }
 
   remove(id: number) {
@@ -53,12 +61,6 @@ async function load(
 async function predict(modelId: number, tensors: Tensor[], symbolValues: SymbolValues): Promise<Tensor[]> {
   await initialize;
   const model = store.get(modelId);
-
-  if (model === undefined) {
-    throw new Error(
-      `Model with ID ${modelId} not found in storage. Maybe you destroyed it?`
-    );
-  }
 
   const inputs = new CoreTensorVec();
   tensors.forEach((tensor) => {
@@ -90,6 +92,13 @@ async function destroy(modelId: number): Promise<void> {
   store.remove(modelId);
 }
 
+async function metadata(modelId: number): Promise<void> {
+  await initialize;
+  const model = store.get(modelId);
+
+  return model.metadata();
+}
+
 ctx.addEventListener("message", (e) => {
   const data = e.data;
   let promise;
@@ -103,6 +112,9 @@ ctx.addEventListener("message", (e) => {
       break;
     case "destroy":
       promise = destroy(data.body.modelId);
+      break;
+    case "metadata":
+      promise = metadata(data.body.modelId);
       break;
     default:
       throw new Error(`could not find type ${data.type}`);

@@ -1,4 +1,5 @@
 use js_sys::{Array, Error, JsString, Object, Uint32Array};
+use std::collections::HashMap;
 use std::io::Cursor;
 use tract_core::internal::ToDim;
 use tract_hir::prelude::*;
@@ -301,6 +302,7 @@ impl From<TypedSimplePlan<TypedModel>> for Model {
 #[wasm_bindgen]
 pub struct CoreModel {
     model: Model,
+    metadata: HashMap<String, String>,
 }
 
 #[wasm_bindgen]
@@ -315,11 +317,18 @@ impl CoreModel {
     ) -> Result<CoreModel, JsValue> {
         console_error_panic_hook::set_once();
 
+        let mut metadata = HashMap::new();
         let mut reader = Cursor::new(data);
         let mut model_has_symbolic_dim = false;
 
         let mut model = if use_onnx {
-            onnx().model_for_read(&mut reader)
+            let model_proto = onnx().proto_model_for_read(&mut reader).map_js_error()?;
+
+            for entry in &model_proto.metadata_props {
+                metadata.insert(entry.key.to_string(), entry.value.to_string());
+            }
+
+            onnx().model_for_proto_model(&model_proto)
         } else {
             tensorflow().model_for_read(&mut reader)
         }
@@ -375,7 +384,11 @@ impl CoreModel {
             model.into_runnable().map_js_error()?.into()
         };
 
-        Ok(CoreModel { model })
+        Ok(CoreModel { model, metadata })
+    }
+
+    pub fn metadata(&self) -> JsValue {
+        JsValue::from_serde(&self.metadata).unwrap()
     }
 
     pub fn predict(

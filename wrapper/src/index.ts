@@ -1,6 +1,6 @@
 import Worker from "web-worker";
 import { Tensor } from "./tensor";
-import { Format, Options, InternalOptions, SymbolValues } from "./options";
+import { Format, Options, InternalOptions, SymbolValues, Metadata } from "./options";
 // @ts-ignore
 import * as utils from "__utils__";
 import worker_data from "../dist/worker.js";
@@ -121,6 +121,15 @@ class Model {
       symbolValues,
     }) as Promise<Tensor[]>);
     return tensors[0];
+  }
+
+  /**
+   * Gets metadata of the model.
+   * 
+   * @returns An object corresponding to the key "metadata_props" of an ONNX model, or an empty object for a TF model.
+   */
+  async get_metadata(): Promise<Metadata> {
+    return await (call("metadata", { modelId: await this.modelId }) as Promise<Metadata>);
   }
 
   /**
