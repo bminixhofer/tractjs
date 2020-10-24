@@ -23,7 +23,7 @@ class ModelStorage {
   }
 
   get(id: number): CoreModel {
-    let model = this.store[id];
+    const model = this.store[id];
 
     if (model === undefined) {
       throw new Error(
