@@ -7,6 +7,9 @@ declare type DimSymbol = string | {
     slope: number;
     intercept: number;
 };
+declare type Metadata = {
+    [key: string]: string;
+};
 declare type Format = "onnx" | "tensorflow";
 declare type Shape = Array<number | DimSymbol>;
 declare type Fact = [DataType, Shape];
@@ -42,4 +45,4 @@ declare type InternalOptions = {
     outputs?: Array<string>;
     inputFacts: Record<number, Fact>;
 };
-export { Format, Options, InternalOptions, SymbolValues };
+export { Format, Options, InternalOptions, SymbolValues, Metadata };

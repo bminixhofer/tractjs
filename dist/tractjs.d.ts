@@ -22,6 +22,9 @@ export declare type DimSymbol = string | {
 	slope: number;
 	intercept: number;
 };
+export declare type Metadata = {
+	[key: string]: string;
+};
 export declare type Format = "onnx" | "tensorflow";
 export declare type Shape = Array<number | DimSymbol>;
 export declare type Fact = [DataType, Shape];
@@ -82,6 +85,12 @@ export declare class Model {
 	 * @returns The first output tensor.
 	 */
 	predict_one(input: Tensor, symbolValues?: SymbolValues): Promise<Tensor>;
+	/**
+	 * Gets metadata of the model.
+	 *
+	 * @returns An object corresponding to the key "metadata_props" of an ONNX model, or an empty object for a TF model.
+	 */
+	get_metadata(): Promise<Metadata>;
 	/**
 	 * Removes all references to the internal model allowing it to be garbage collected.
 	 */

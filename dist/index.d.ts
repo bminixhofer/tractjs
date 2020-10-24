@@ -1,5 +1,5 @@
 import { Tensor } from "./tensor";
-import { Options, SymbolValues } from "./options";
+import { Options, SymbolValues, Metadata } from "./options";
 /**
  * A Tensorflow or ONNX model.
  *
@@ -32,6 +32,12 @@ declare class Model {
      * @returns The first output tensor.
      */
     predict_one(input: Tensor, symbolValues?: SymbolValues): Promise<Tensor>;
+    /**
+     * Gets metadata of the model.
+     *
+     * @returns An object corresponding to the key "metadata_props" of an ONNX model, or an empty object for a TF model.
+     */
+    get_metadata(): Promise<Metadata>;
     /**
      * Removes all references to the internal model allowing it to be garbage collected.
      */

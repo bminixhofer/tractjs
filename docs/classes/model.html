@@ -2727,6 +2727,9 @@ img {
 					<a href="model.html#destroy" class="tsd-kind-icon">destroy</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="model.html#get_metadata" class="tsd-kind-icon">get_<wbr>metadata</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="model.html#predict" class="tsd-kind-icon">predict</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -2751,6 +2754,9 @@ img {
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#format" class="tsd-kind-icon">Format</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="../globals.html#metadata" class="tsd-kind-icon">Metadata</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#options" class="tsd-kind-icon">Options</a>
@@ -2799,6 +2805,7 @@ img {
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="model.html#destroy" class="tsd-kind-icon">destroy</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="model.html#get_metadata" class="tsd-kind-icon">get_<wbr>metadata</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="model.html#predict" class="tsd-kind-icon">predict</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="model.html#predict_one" class="tsd-kind-icon">predict_<wbr>one</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="model.html#load" class="tsd-kind-icon">load</a></li>
@@ -2825,6 +2832,26 @@ img {
 							</div>
 						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="get_metadata" class="tsd-anchor"></a>
+				<h3>get_<wbr>metadata</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">get_<wbr>metadata<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#metadata" class="tsd-signature-type">Metadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets metadata of the model.</p>
+							</div>
+						</div>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#metadata" class="tsd-signature-type">Metadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>An object corresponding to the key &quot;metadata_props&quot; of an ONNX model, or an empty object for a TF model.</p>
 					</li>
 				</ul>
 			</section>
