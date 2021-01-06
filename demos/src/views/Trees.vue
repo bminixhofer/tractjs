@@ -105,19 +105,19 @@
       </v-row>
       <markdown-it-vue :content="regressorUsage[selected]['code']" />
       <markdown-it-vue class="mt-4" :content="regressorMd" />
+      <p>
+        Tested with:
+        <pre>
+    xgboost==1.3.1
+    onnx==1.8.0
+    onnxmltools==1.7.0
+    scikit-learn==0.23.2
+    lightgbm==3.1.1
+    hummingbird-ml==0.2.1
+    torch==1.7.0
+        </pre>
+      </p>
     </div>
-    <p>
-    Tested with:
-    <pre>
-      xgboost==1.3.1
-      onnx==1.8.0
-      onnxmltools==1.7.0
-      scikit-learn==0.23.2
-      lightgbm==3.1.1
-      hummingbird-ml==0.2.1
-      torch==1.7.0
-    </pre>
-  </p>
   </div>
 </template>
 
