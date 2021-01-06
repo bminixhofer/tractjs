@@ -2,6 +2,7 @@ use js_sys::{Array, Error, JsString, Object, Uint32Array};
 use std::collections::HashMap;
 use std::io::Cursor;
 use tract_core::internal::ToDim;
+use tract_hir::internal::tract_num_traits::AsPrimitive;
 use tract_hir::prelude::*;
 use tract_onnx::prelude::*;
 use tract_tensorflow::prelude::*;
@@ -219,15 +220,37 @@ impl CoreTensor {
             }};
         }
 
+        macro_rules! cast_array {
+            ( $tensor:expr, $array_type:ty, $src:ty, $trg:ty ) => {{
+                <$array_type>::from(
+                    &$tensor
+                        .to_array_view()
+                        .map_js_error()?
+                        .as_slice()
+                        .expect("slice is not contiguous.")
+                        .iter()
+                        .map(|x: &$src| x.as_())
+                        .collect::<Vec<$trg>>()[..],
+                )
+            }};
+        }
+
         match self.inner.datum_type() {
             DatumType::I8 => Ok(make_array!(self.inner, js_sys::Int8Array).into()),
             DatumType::U8 => Ok(make_array!(self.inner, js_sys::Uint8Array).into()),
             DatumType::I16 => Ok(make_array!(self.inner, js_sys::Int16Array).into()),
             DatumType::U16 => Ok(make_array!(self.inner, js_sys::Uint16Array).into()),
+            DatumType::U32 => Ok(make_array!(self.inner, js_sys::Uint32Array).into()),
             DatumType::I32 => Ok(make_array!(self.inner, js_sys::Int32Array).into()),
             DatumType::F32 => Ok(make_array!(self.inner, js_sys::Float32Array).into()),
             DatumType::F64 => Ok(make_array!(self.inner, js_sys::Float64Array).into()),
-            _ => panic!("unsupported data type"),
+            DatumType::I64 => Ok(cast_array!(self.inner, js_sys::Int32Array, i64, i32).into()),
+            DatumType::U64 => Ok(cast_array!(self.inner, js_sys::Uint32Array, u64, u32).into()),
+            DatumType::F16 => Ok(cast_array!(self.inner, js_sys::Float32Array, f16, f32).into()),
+            DatumType::Bool => Ok(cast_array!(self.inner, js_sys::Uint8Array, bool, u8).into()),
+            DatumType::Blob | DatumType::TDim | DatumType::String => {
+                panic!("`blob`, `tdim` and `string` datum types are not supported.")
+            }
         }
     }
 
