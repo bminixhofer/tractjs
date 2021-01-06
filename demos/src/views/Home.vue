@@ -52,6 +52,12 @@ export default {
         href: "squeezenet",
       },
       {
+        title: "XGBoost / LightGBM models",
+        text:
+          "Run Decision Tree Classifiers and Regressors right in the browser!",
+        href: "trees",
+      },
+      {
         title: "Custom model inference",
         text: "Upload a .onnx file and run data through it.",
         href: "custom-model",
@@ -64,15 +70,15 @@ export default {
       },
       {
         title: "tractjs on Github",
-        href: "https://github.com/bminixhofer/tract-js",
+        href: "https://github.com/bminixhofer/tractjs",
       },
       {
         title: "tract on Github",
-        href: "https://github.com/snipsco/tract",
+        href: "https://github.com/sonos/tract",
       },
       {
         title: "tract on docs.rs",
-        href: "https://docs.rs/tract-core/0.6.3/tract_core/",
+        href: "https://docs.rs/tract-core/",
       },
     ],
   }),
