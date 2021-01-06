@@ -48,7 +48,7 @@ jobs:
         run: cargo run --bin test_reference -- simple_onnx ../quality/tests/inputs.json ../quality/tests/outputs.json
         working-directory: ${{env.working-directory}}
       - name: Run integration tests
-        uses: cypress-io/github-action@v1
+        uses: cypress-io/github-action@v2
         with:
           working-directory: ${{env.working-directory}}
           start: python -m http.server 8000 -d ..
