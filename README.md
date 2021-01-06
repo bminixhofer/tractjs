@@ -14,8 +14,9 @@ The [Open Neural Network Exchange](https://onnx.ai/) is a format which many popu
 
 There is currently one other usable ONNX runner for the browser, [ONNX.js](https://github.com/microsoft/onnxjs). There are a couple of things tractjs does better:
 
-- tractjs supports more operators. LSTMs (even bidirectional) are supported, while ONNX.js does not support any recurrent networks.
-- tractjs is maintained. At the time of writing the last significant commit to ONNX.js was more than one year ago.
+- tractjs supports more operators:
+  - LSTMs (even bidirectional) are supported while ONNX.js does not support any recurrent networks.
+  - Some ONNX-ML models like decision tree classifiers are also supported.
 - tractjs is more convenient to use. It can build to a single file `tractjs.min.js` which contains the inlined WASM and WebWorker. The WASM backend of ONNX.js can not as easily be used without a build system.
 
 There are however also some downsides to tractjs. See the [FAQ](#faq).
@@ -78,7 +79,7 @@ tractjs.load("./path/to/your/model").then((model) => {
 
 ## FAQ
 
-### My model with dynamic input dimensions doesn't work. Why?
+### Why does my model with dynamic input dimensions not work?
 
 Currently, tract requires has some restrictions on dynamic dimensions. If your model has a dynamic dimension, there's multiple solutions:
 
