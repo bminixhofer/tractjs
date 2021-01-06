@@ -2778,8 +2778,11 @@ img {
 			</a>
 			<p>There is currently one other usable ONNX runner for the browser, <a href="https://github.com/microsoft/onnxjs">ONNX.js</a>. There are a couple of things tractjs does better:</p>
 			<ul>
-				<li>tractjs supports more operators. LSTMs (even bidirectional) are supported, while ONNX.js does not support any recurrent networks.</li>
-				<li>tractjs is maintained. At the time of writing the last significant commit to ONNX.js was more than one year ago.</li>
+				<li>tractjs supports more operators:<ul>
+						<li>LSTMs (even bidirectional) are supported while ONNX.js does not support any recurrent networks.</li>
+						<li>Some ONNX-ML models like decision tree classifiers are also supported.</li>
+					</ul>
+				</li>
 				<li>tractjs is more convenient to use. It can build to a single file <code>tractjs.min.js</code> which contains the inlined WASM and WebWorker. The WASM backend of ONNX.js can not as easily be used without a build system.</li>
 			</ul>
 			<p>There are however also some downsides to tractjs. See the <a href="#faq">FAQ</a>.</p>
@@ -2832,8 +2835,8 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 			<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
 				<h2>FAQ</h2>
 			</a>
-			<a href="#my-model-with-dynamic-input-dimensions-doesn39t-work-why" id="my-model-with-dynamic-input-dimensions-doesn39t-work-why" style="color: inherit; text-decoration: none;">
-				<h3>My model with dynamic input dimensions doesn&#39;t work. Why?</h3>
+			<a href="#why-does-my-model-with-dynamic-input-dimensions-not-work" id="why-does-my-model-with-dynamic-input-dimensions-not-work" style="color: inherit; text-decoration: none;">
+				<h3>Why does my model with dynamic input dimensions not work?</h3>
 			</a>
 			<p>Currently, tract requires has some restrictions on dynamic dimensions. If your model has a dynamic dimension, there&#39;s multiple solutions:</p>
 			<ol>
@@ -3002,7 +3005,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> input<wbr>Facts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Mapping of indices to facts to set for the input. Each fact is passed to <a href="https://docs.rs/tract-core/0.12.2/tract_core/model/struct.ModelImpl.html#method.set_input_fact"><code>set_input_fact</code></a>.</p>
+									<p>Mapping of indices to facts to set for the input. Each fact is passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_input_fact"><code>set_input_fact</code></a>.</p>
 								</div>
 							</div>
 						</li>
@@ -3010,7 +3013,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The node names of model inputs. Passed to <a href="https://docs.rs/tract-core/0.12.2/tract_core/model/struct.ModelImpl.html#method.set_input_names"><code>set_input_names</code></a>.</p>
+									<p>The node names of model inputs. Passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_input_names"><code>set_input_names</code></a>.</p>
 								</div>
 							</div>
 						</li>
@@ -3026,7 +3029,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The node names of model outputs. Passed to <a href="https://docs.rs/tract-core/0.12.2/tract_core/model/struct.ModelImpl.html#method.set_output_names"><code>set_output_names</code></a>.</p>
+									<p>The node names of model outputs. Passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_output_names"><code>set_output_names</code></a>.</p>
 								</div>
 							</div>
 						</li>
