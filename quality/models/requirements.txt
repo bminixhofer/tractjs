@@ -1,3 +1,0 @@
-tensorflow==1.15.3
-Keras==2.1.1
-git+https://github.com/rcmalli/keras-squeezenet.git#egg=keras-squeezenet

@@ -25,12 +25,6 @@ jobs:
         uses: actions-rs/toolchain@v1
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - name: Install Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
-      - name: Install Tensorflow.js Converter
-        run: pip install tensorflowjs
       - name: Download models
         run: ./download_models.sh
         working-directory: quality/models
