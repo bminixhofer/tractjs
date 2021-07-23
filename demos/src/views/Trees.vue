@@ -201,7 +201,7 @@ export default {
         1,
         this.columns.length,
       ]);
-      let preds = await model.predict([tensor], { s: 1 });
+      let preds = await model.predict([tensor]);
       // .predict returns an array of tensors, we are interested in the data of the first output
       this.output = Object.fromEntries(
         Array.from(preds[0].data).map((x, i) => [this.labelNames[i], x])

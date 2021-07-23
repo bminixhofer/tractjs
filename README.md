@@ -93,16 +93,6 @@ const model = await tractjs.load("path/to/your/model", {
 });
 ```
 
-This dimension must then be made concrete on prediction:
-
-```js
-model.predict(input, {
-  "s": 3 // or some other value
-})
-```
-
-The API supports multiple dynamic dimensions, but currently it will probably only work with one.
-
 2. Set fixed input dimensions via input facts. This is of course not ideal because subsequently the model can only be passed inputs with this exact shape:
 
 ```js
