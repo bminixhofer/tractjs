@@ -1,5 +1,5 @@
 import { Tensor } from "./tensor";
-import { Options, SymbolValues, Metadata } from "./options";
+import { Options, Metadata } from "./options";
 /**
  * A Tensorflow or ONNX model.
  *
@@ -18,20 +18,18 @@ declare class Model {
     /**
      * Runs the model on the given input.
      * @param inputs - List of input tensors.
-     * @param symbolValues - (optional) values for symbolic dimensions.
      *
      * @returns Promise for a list of output tensors.
      */
-    predict(inputs: Tensor[], symbolValues?: SymbolValues): Promise<Tensor[]>;
+    predict(inputs: Tensor[]): Promise<Tensor[]>;
     /**
      * Runs the model on a single input tensor.
      * This method is provided as convenience method for interfacing with Rust WASM, since arrays of custom objects are not supported yet.
      * @param input - a single input tensor.
-     * @param symbolValues - (optional) values for symbolic dimensions.
      *
      * @returns The first output tensor.
      */
-    predict_one(input: Tensor, symbolValues?: SymbolValues): Promise<Tensor>;
+    predict_one(input: Tensor): Promise<Tensor>;
     /**
      * Gets metadata of the model.
      *

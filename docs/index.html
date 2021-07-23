@@ -2748,9 +2748,6 @@ img {
 			<a href="globals.html#shape" class="tsd-kind-icon">Shape</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
-			<a href="globals.html#symbolvalues" class="tsd-kind-icon">Symbol<wbr>Values</a>
-		</li>
-		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a>
 		</li>
 		<li class=" tsd-kind-variable">
@@ -2847,11 +2844,6 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
     <span class="hljs-number">0</span>: [<span class="hljs-string">&quot;float32&quot;</span>, [<span class="hljs-number">1</span>, <span class="hljs-string">&quot;s&quot;</span>, <span class="hljs-number">224</span>, <span class="hljs-number">224</span>]],
   },
 });</code></pre>
-			<p>This dimension must then be made concrete on prediction:</p>
-			<pre><code class="language-js">model.predict(input, {
-  <span class="hljs-string">&quot;s&quot;</span>: <span class="hljs-number">3</span> <span class="hljs-comment">// or some other value</span>
-})</code></pre>
-			<p>The API supports multiple dynamic dimensions, but currently it will probably only work with one.</p>
 			<ol start="2">
 				<li>Set fixed input dimensions via input facts. This is of course not ideal because subsequently the model can only be passed inputs with this exact shape:</li>
 			</ol>
@@ -2916,7 +2908,6 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<li class="tsd-kind-type-alias"><a href="globals.html#metadata" class="tsd-kind-icon">Metadata</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#options" class="tsd-kind-icon">Options</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#shape" class="tsd-kind-icon">Shape</a></li>
-							<li class="tsd-kind-type-alias"><a href="globals.html#symbolvalues" class="tsd-kind-icon">Symbol<wbr>Values</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#typedarray" class="tsd-kind-icon">Typed<wbr>Array</a></li>
 						</ul>
 					</section>
@@ -3006,7 +2997,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> input<wbr>Facts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><a href="globals.html#fact" class="tsd-signature-type">Fact</a><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Mapping of indices to facts to set for the input. Each fact is passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_input_fact"><code>set_input_fact</code></a>.</p>
+									<p>Mapping of indices to facts to set for the input. Each fact is passed to <a href="https://docs.rs/tract-core/0.15.2/tract_core/model/struct.ModelImpl.html#method.set_input_fact"><code>set_input_fact</code></a>.</p>
 								</div>
 							</div>
 						</li>
@@ -3014,7 +3005,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> inputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The node names of model inputs. Passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_input_names"><code>set_input_names</code></a>.</p>
+									<p>The node names of model inputs. Passed to <a href="https://docs.rs/tract-core/0.15.2/tract_core/model/struct.ModelImpl.html#method.set_input_names"><code>set_input_names</code></a>.</p>
 								</div>
 							</div>
 						</li>
@@ -3030,7 +3021,7 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 							<h5><span class="tsd-flag ts-flagOptional">Optional</span> outputs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The node names of model outputs. Passed to <a href="https://docs.rs/tract-core/0.12.4/tract_core/model/struct.ModelImpl.html#method.set_output_names"><code>set_output_names</code></a>.</p>
+									<p>The node names of model outputs. Passed to <a href="https://docs.rs/tract-core/0.15.2/tract_core/model/struct.ModelImpl.html#method.set_output_names"><code>set_output_names</code></a>.</p>
 								</div>
 							</div>
 						</li>
@@ -3043,21 +3034,6 @@ tractjs.load(<span class="hljs-string">&quot;./path/to/your/model&quot;</span>).
 				<div class="tsd-signature tsd-kind-icon">Shape<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="globals.html#dimsymbol" class="tsd-signature-type">DimSymbol</a><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-type-alias">
-				<a name="symbolvalues" class="tsd-anchor"></a>
-				<h3>Symbol<wbr>Values</h3>
-				<div class="tsd-signature tsd-kind-icon">Symbol<wbr>Values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
-				<aside class="tsd-sources">
-				</aside>
-				<div class="tsd-type-declaration">
-					<h4>Type declaration</h4>
-					<ul class="tsd-parameters">
-						<li class="tsd-parameter-index-signature">
-							<h5><span class="tsd-signature-symbol">[</span>id: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">number</span></h5>
-						</li>
-					</ul>
-				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="typedarray" class="tsd-anchor"></a>
