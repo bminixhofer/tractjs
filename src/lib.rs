@@ -72,8 +72,8 @@ fn fact_from_js(input: JsValue) -> (InferenceFact, bool) {
                         let intercept = js_sys::Reflect::get(&object, &JsString::from("intercept")).expect("fact[1][i] must have 'intercept' key if object.")
                             .as_f64().expect("fact[1][i]['intercept'] must be a number.") as isize;
 
-                        let slope = js_sys::Reflect::get(&object, &JsString::from("slope")).expect("fact[1][i] must have 'slope' key if object.")
-                            .as_f64().expect("fact[1][i]['slope'] must be a number.");
+                        let slope= js_sys::Reflect::get(&object, &JsString::from("slope")).expect("fact[1][i] must have 'slope' key if object.")
+                            .as_f64().expect("fact[1][i]['slope'] must be an integer.") as isize;
 
                         let symbol: TDim =  Symbol::from(id.chars().next().expect("fact[1][i] must consist of exactly one character if string.")).into();
                         has_symbolic_dim = true;
@@ -98,35 +98,6 @@ fn fact_from_js(input: JsValue) -> (InferenceFact, bool) {
         },
         has_symbolic_dim,
     )
-}
-
-fn symbol_values_from_js(input: JsValue) -> SymbolValues {
-    let input: Object = input.dyn_into().expect("SymbolValues must be object.");
-    let entries = Object::entries(&input);
-
-    let mut symbol_values = SymbolValues::default();
-
-    for i in 0..entries.length() {
-        let val: Array = entries
-            .get(i)
-            .dyn_into()
-            .expect(".entries[i] must be an array.");
-
-        symbol_values = symbol_values.with(
-            val.get(0)
-                .as_string()
-                .expect("entries[i][0] must be a string.")
-                .chars()
-                .next()
-                .expect("entries[i][0] must consist of exactly one character.")
-                .into(),
-            val.get(1)
-                .as_f64()
-                .expect("entries[i][1] must be a number.") as i64,
-        )
-    }
-
-    symbol_values
 }
 
 #[wasm_bindgen]
@@ -248,8 +219,12 @@ impl CoreTensor {
             DatumType::U64 => Ok(cast_array!(self.inner, js_sys::Uint32Array, u64, u32).into()),
             DatumType::F16 => Ok(cast_array!(self.inner, js_sys::Float32Array, f16, f32).into()),
             DatumType::Bool => Ok(cast_array!(self.inner, js_sys::Uint8Array, bool, u8).into()),
-            DatumType::Blob | DatumType::TDim | DatumType::String => {
-                panic!("`blob`, `tdim` and `string` datum types are not supported.")
+            DatumType::Blob
+            | DatumType::TDim
+            | DatumType::String
+            | DatumType::QI8(_)
+            | DatumType::QU8(_) => {
+                panic!("`blob`, `tdim`, `string`, `qi8`, `qu8` datum types are not supported.")
             }
         }
     }
@@ -272,8 +247,7 @@ impl From<CoreTensor> for Tensor {
 }
 
 enum Model {
-    Inference(tract_hir::infer::InferenceSimplePlan<InferenceModel>),
-    Optimized(TypedModel),
+    Inference(InferenceSimplePlan<InferenceModel>),
     Typed(TypedSimplePlan<TypedModel>),
 }
 
@@ -284,22 +258,10 @@ extern "C" {
 }
 
 impl Model {
-    fn run(
-        &self,
-        inputs: TVec<Tensor>,
-        symbol_values: &SymbolValues,
-    ) -> TractResult<TVec<Arc<Tensor>>> {
+    fn run(&self, inputs: TVec<Tensor>) -> TractResult<TVec<Arc<Tensor>>> {
         match self {
             Model::Inference(x) => x.run(inputs),
             Model::Typed(x) => x.run(inputs),
-            Model::Optimized(x) => {
-                let model = x
-                    .concretize_dims(symbol_values)?
-                    .optimize()?
-                    .into_runnable()?;
-
-                model.run(inputs)
-            }
         }
     }
 }
@@ -307,12 +269,6 @@ impl Model {
 impl From<tract_hir::infer::InferenceSimplePlan<InferenceModel>> for Model {
     fn from(input: tract_hir::infer::InferenceSimplePlan<InferenceModel>) -> Self {
         Model::Inference(input)
-    }
-}
-
-impl From<TypedModel> for Model {
-    fn from(input: TypedModel) -> Self {
-        Model::Optimized(input)
     }
 }
 
@@ -342,7 +298,6 @@ impl CoreModel {
 
         let mut metadata = HashMap::new();
         let mut reader = Cursor::new(data);
-        let mut model_has_symbolic_dim = false;
 
         let mut model = if use_onnx {
             let model_proto = onnx().proto_model_for_read(&mut reader).map_js_error()?;
@@ -361,8 +316,7 @@ impl CoreModel {
             .iter()
             .zip(Object::values(&input_facts).iter())
         {
-            let (fact, fact_has_symbolic_dim) = fact_from_js(fact);
-            model_has_symbolic_dim = model_has_symbolic_dim || fact_has_symbolic_dim;
+            let (fact, _) = fact_from_js(fact);
 
             model
                 .set_input_fact(
@@ -394,15 +348,13 @@ impl CoreModel {
                 .map_js_error()?;
         }
 
-        let model: Model = if optimize && !model_has_symbolic_dim {
+        let model: Model = if optimize {
             model
                 .into_optimized()
                 .map_js_error()?
                 .into_runnable()
                 .map_js_error()?
                 .into()
-        } else if optimize {
-            model.into_optimized().map_js_error()?.into()
         } else {
             model.into_runnable().map_js_error()?.into()
         };
@@ -414,15 +366,8 @@ impl CoreModel {
         JsValue::from_serde(&self.metadata).unwrap()
     }
 
-    pub fn predict(
-        &self,
-        data: CoreTensorVec,
-        symbol_values: JsValue,
-    ) -> Result<CoreTensorVec, JsValue> {
-        let outputs = self
-            .model
-            .run(data.into_tvec(), &symbol_values_from_js(symbol_values))
-            .map_js_error()?;
+    pub fn predict(&self, data: CoreTensorVec) -> Result<CoreTensorVec, JsValue> {
+        let outputs = self.model.run(data.into_tvec()).map_js_error()?;
         Ok(CoreTensorVec::from_slice(&outputs))
     }
 }

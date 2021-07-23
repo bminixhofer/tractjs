@@ -62,9 +62,7 @@ describe('model', () => {
       },
     });
     const input = new Tensor(new Float32Array([1, 2, 3, 4]), [1, 4]);
-    const predictions = await model.predict([input], {
-      's': 4
-    });
+    const predictions = await model.predict([input]);
     expect(Array.from(predictions[0].data)).toEqual([4, 5, 6, 7])
   });
   test('can predict with dynamic dimension (and dimension arithmetic)', async () => {
@@ -78,9 +76,7 @@ describe('model', () => {
       },
     });
     const input = new Tensor(new Uint8Array([1, 2, 3, 4]), [1, 4]);
-    const predictions = await model.predict([input], {
-      's': 2
-    });
+    const predictions = await model.predict([input]);
     expect(predictions[0].shape).toEqual([1, 4, 2])
   });
   test('can access model metadata', async () => {

@@ -1,6 +1,5 @@
 import type { DataType } from "tractjs-core";
 
-type SymbolValues = { [id: string]: number };
 type DimSymbol = string | {
   id: string,
   slope: number,
@@ -47,4 +46,4 @@ type InternalOptions = {
   inputFacts: Record<number, Fact>;
 };
 
-export { Format, Options, InternalOptions, SymbolValues, Metadata };
+export { Format, Options, InternalOptions, Metadata };

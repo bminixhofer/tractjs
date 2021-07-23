@@ -38,7 +38,7 @@ where
                 .map(|x| *x as $type)
                 .collect()
         };
-    };
+    }
 
     let tensors: Vec<_> = tensors
         .into_iter()
@@ -158,7 +158,7 @@ fn main() -> TractResult<()> {
         "simple_tf" => no_options_tf(input_file, output_file)?,
         "custom_output_onnx" => custom_output_onnx(input_file, output_file)?,
         "custom_input_tf" => custom_input_tf(input_file, output_file)?,
-        _ => panic!(format!("unknown name {}.", name)),
+        _ => panic!("unknown name {}.", name),
     };
 
     Ok(())
